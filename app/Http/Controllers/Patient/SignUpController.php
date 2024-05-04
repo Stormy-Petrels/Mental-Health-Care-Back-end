@@ -40,6 +40,7 @@ class SignUpController extends Controller
 
         $this->userRepository->insert($newUser);
         $this->patientRepository->insert($newPatient);
+
         return response()->json([
             'message' => 'Sign Up Successfully',
             'payload' => new SignInRes(
