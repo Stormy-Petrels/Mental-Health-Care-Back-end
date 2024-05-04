@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 use App\Models\Patient;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class PatientRepository
@@ -22,6 +23,6 @@ class PatientRepository
         $result = DB::select("SELECT * FROM users
         WHERE email = ? LIMIT 1", [$email]);
         $newUser = $result[0];
-        return new patient($newUser->id);
+        return new Patient($newUser->id);
     }
 }
