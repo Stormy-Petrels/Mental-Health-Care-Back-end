@@ -22,6 +22,6 @@ class PatientRepository
         $result = DB::select("SELECT * FROM users
         WHERE email = ? LIMIT 1", [$email]);
         $newUser = $result[0];
-        return $newUser->id;
+        return new patient($newUser->id);
     }
 }
