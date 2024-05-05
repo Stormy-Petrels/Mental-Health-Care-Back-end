@@ -8,30 +8,36 @@ use Illuminate\Database\Eloquent\Model;
 class Doctor extends BaseModel                          
 {
     public string $userid;
-    public string $specialization;
     public string $description;
+    public string|null $major;
+    public User|null $user;
+
     /**
      * @param string $userid
      * @throws \Exception
      */
     
-    public function __construct(string $userid, string $specialization, string $description)
+    public function __construct(string $userid, string $description,string|null $major = null, User|null $user = null)
     {
         parent::__construct();
         $this->userid = $userid;
-        $this->specialization = $specialization;
         $this->description = $description;
+        $this->major = $major;
+        $this->user = $user;
     }
+    
     public function getUserId(): string
     {
         return $this->userid;
     }
+
     public function getDescription(): string
     {
         return $this->description;
     }
-    public function getSpecialization(): string
+    
+    public function getMajor(): string
     {
-        return $this->specialization;
+        return $this->major;
     }
 }
