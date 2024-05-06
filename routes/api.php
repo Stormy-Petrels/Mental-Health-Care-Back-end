@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\SignUpController;
 use App\Http\Controllers\Common\SignInController;
-use App\Http\Controllers\Patient\ProfileController;
+use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 
 
@@ -28,8 +28,8 @@ Route::post("/sign-up",  [SignUpController::class, 'signUp']);
 
 
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
-Route::get('/profile/{id}', [ProfileController::class, 'index']);
-Route::post('/profile/{id}', [ProfileController::class, 'update']);
+Route::get('/profile/{id}', [PatientController::class, 'index']);
+Route::post('/profile/{id}', [PatientController::class, 'update']);
 
-Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
+Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 

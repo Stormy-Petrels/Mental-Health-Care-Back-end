@@ -13,7 +13,7 @@ use App\Models\Role;
 use App\Models\Patient;
 use App\Dtos\Patient\ProfileRes;
 
-class ProfileController extends Controller
+class PatientController extends Controller
 {
     private $patientRepository;
 

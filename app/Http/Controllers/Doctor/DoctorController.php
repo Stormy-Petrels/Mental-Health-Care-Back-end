@@ -16,13 +16,13 @@ class DoctorController extends Controller
         $this->doctorRepository = new DoctorRepository();
     }
     
-    public function profileDoctor(ProfileReq $req){
+    public function profileDoctor($id){
 
-        $doctor = $this->doctorRepository->getDoctorById($req->id);  
+        $doctor = $this->doctorRepository->getDoctorById($id);  
         
         return response()->json(
             [
-            'message' => 'Profile Successfully',
+            'message' => 'View profile doctor successfully',
             'payload' => new ProfileRes(
                 $doctor->getUserId(),
                 $doctor->getDescription(),
