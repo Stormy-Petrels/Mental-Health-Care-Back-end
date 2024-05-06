@@ -30,7 +30,7 @@ class DoctorRepository
         JOIN majors ON doctors.majorId = majors.id
         WHERE users.role = 'doctor' AND doctors.id = '$id'");
         $result = $query[0];
-        return new doctor($result->id, $result->description, $result->name, new User(Role::Doctor,$result->email,$result->password,$result->fullName,$result->phone,$result->address,$result->urlImage));
+        return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor,$result->email,$result->password,$result->fullName,$result->phone,$result->address,$result->urlImage));
     }
 
 }
