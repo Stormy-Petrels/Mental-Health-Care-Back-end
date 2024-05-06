@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\SignUpController;
 use App\Http\Controllers\Common\SignInController;
+use App\Http\Controllers\Patient\ProfileController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +25,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
+Route::get('/profile/{id}', [ProfileController::class, 'index']);
+Route::post('/profile/{id}', [ProfileController::class, 'update']);
