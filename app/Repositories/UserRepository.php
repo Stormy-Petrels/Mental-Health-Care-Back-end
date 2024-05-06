@@ -12,7 +12,7 @@ class UserRepository
 
     public function insert(User $user)
     {
-        $sql = "INSERT INTO $this->tableName (id, role, name, email, password, phone, address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id, role, fullName, email, password, phone, address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
             $user->getRole()->getValue(),
@@ -56,10 +56,10 @@ class UserRepository
                 $role,
                 $newUser->email,
                 $newUser->password,
-                $newUser->name,
+                $newUser->fullName,
                 $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->address == null ? "" : $newUser->address,
-                $newUser->url_image == null ? "" : $newUser->url_image
+                $newUser->urlImage == null ? "" : $newUser->urlImage
             );
         }
         return null;
