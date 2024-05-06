@@ -7,7 +7,7 @@ use App\Http\Controllers\Patient\SignUpController;
 use App\Http\Controllers\Common\SignInController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
-
+use App\Http\Controllers\Admin\AdminDoctorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,12 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
+Route::post("/sign-up",  [SignUpController::class, 'signUp']);
 
 
-Route::post("/sign-in",  [SignInController::class, 'signIn']); 
+Route::post("/sign-in",  [SignInController::class, 'signIn']);
 Route::get('/profile/{id}', [PatientController::class, 'index']);
 Route::post('/profile/{id}', [PatientController::class, 'update']);
 
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
+Route::get('/hi', [AdminDoctorController::class, 'getAllDoctors']);
