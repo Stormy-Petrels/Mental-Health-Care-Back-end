@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 
+use App\Repositories\AdminRepository;
+use App\Repositories\DoctorRepository;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+// Route::get('/hi', [AdminController::class, 'getAllDoctors']);
