@@ -6,9 +6,21 @@ use App\Repositories\DoctorRepository;
 use App\Dtos\Admin\DoctorRes;
 use App\Http\Controllers\Controller;
 
+/**
+ * @OA\Get(
+ *     path="/api/doctors",
+ *     summary="Get all doctors",
+ *     tags={"Doctors"},
+ *     @OA\Response(
+ *         response=200,
+ *         description="Successful operation"
+ *     ),
+ *     @OA\Response(response=401, description="Unauthenticated"),
+ * )
+ */
+
 class AdminDoctorController extends Controller
 {
-    // private AdminRepository $adminRepository;
     private DoctorRepository $doctorRepository;
 
     public function __construct()
@@ -19,7 +31,6 @@ class AdminDoctorController extends Controller
     public function getAllDoctors()
     {
         $doctors = $this->doctorRepository->queryAllDoctors();
-        // dd($doctors);
         $doctorResponses = [];
 
         foreach ($doctors as $doctor) {
