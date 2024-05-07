@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\SignUpController;
 use App\Http\Controllers\Admin\AdminPatientController;
 use App\Http\Controllers\AdminPatientController as ControllersAdminPatientController;
+use App\Http\Controllers\Common\SignInController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,5 @@ Route::prefix('admin')->group(function () {
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
 });
+Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
+Route::post("/sign-in",  [SignInController::class, 'signIn']); 
