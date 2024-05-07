@@ -1,0 +1,114 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Mental Health Care API",
+        "description": "API for managing mental health care services",
+        "contact": {
+            "name": "Admin",
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/patient/signup": {
+            "post": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Patient SignUp",
+                "description": "Register a new Patient",
+                "operationId": "signup",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "fullName",
+                                    "password",
+                                    "phone",
+                                    "address"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "fullName": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SignInRes"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email already exists"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "email is error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SignInRes": {
+                "title": "Sign In Response",
+                "description": "Response schema for sign in operation",
+                "properties": {
+                    "userId": {
+                        "description": "User ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "role": {
+                        "description": "User Role",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

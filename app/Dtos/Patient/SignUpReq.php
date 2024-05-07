@@ -1,7 +1,26 @@
 <?php
 namespace App\Dtos\Patient;
 use Illuminate\Http\Request;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *     schema="SignInRes",
+ *     title="Sign In Response",
+ *     description="Response schema for sign in operation",
+ *     @OA\Property(
+ *         property="userId",
+ *         type="integer",
+ *         format="int64",
+ *         description="User ID"
+ *     ),
+ *     @OA\Property(
+ *         property="role",
+ *         type="string",
+ *         description="User Role"
+ *     )
+ * )
+ */
 class SignUpReq
 {
     public string $email;
@@ -12,19 +31,11 @@ class SignUpReq
 
     public function __construct(Request $req)
     {
-<<<<<<< HEAD
-        $this->email = $req->input("email") ?? "";
-        $this->fullName = $req->input("fullName") ?? "";
-        $this->password = $req->input("password") ?? "";
-        $this->phone = $req->input("phone") ?? "";
-        $this->address = $req->input("address") ?? "";
-=======
         $this->email = $req->input("email");
         $this->fullName = $req->input("fullName");
         $this->password = $req->input("password");
         $this->phone = $req->input("phone");
         $this->address = $req->input("address");
->>>>>>> 3c9a36611aedf3d1b4d6c78b96466b59178a6182
     }
 
     public function rules(): array
