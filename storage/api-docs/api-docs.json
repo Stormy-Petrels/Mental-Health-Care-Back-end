@@ -1,0 +1,111 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Title",
+        "description": "Description of your API",
+        "contact": {
+            "name": "Admin",
+            "email": "admin@example.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/doctor/profile/{id}": {
+            "get": {
+                "tags": [
+                    "Doctor Profile"
+                ],
+                "summary": "Retrieve the profile of a specific doctor.",
+                "description": "Retrieve the profile of a specific doctor by ID.",
+                "operationId": "profileDoctor",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the doctor.",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile Successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Profile Successfully"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "user_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Doctor's description"
+                                                },
+                                                "major": {
+                                                    "type": "string",
+                                                    "example": "Doctor's major"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "doctor@example.com"
+                                                },
+                                                "full_name": {
+                                                    "type": "string",
+                                                    "example": "Doctor Full Name"
+                                                },
+                                                "address": {
+                                                    "type": "string",
+                                                    "example": "Doctor's Address"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "Doctor's Phone"
+                                                },
+                                                "url_image": {
+                                                    "type": "string",
+                                                    "example": "url_to_image"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Doctor not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
