@@ -7,6 +7,7 @@ enum Role
     case Admin;
     case Doctor;
     case Patient;
+    case Cashier;
 
     public function getValue(): string
     {
@@ -15,6 +16,7 @@ enum Role
             Role::Admin => "Admin",
             Role::Doctor => "Doctor",
             Role::Patient => "Patient",
+            Role::Cashier => "Cashier",
         };
     }
 }

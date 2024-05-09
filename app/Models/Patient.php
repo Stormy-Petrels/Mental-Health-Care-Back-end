@@ -5,30 +5,32 @@ namespace App\Models;
 class Patient extends BaseModel
 {
 
-    public string $userid;
-    public string|null $health_condition;
+    public string $userId;
+    public string|null $healthCondition;
     public string|null $note;
+    public User|null $user;
 
 
     /**
-     * @param string $userid
+     * @param string $userId
      */
-    public function __construct(string $userid, string|null $health_condition = null, string|null $note = null)
+    public function __construct(string $userId, string|null $healthCondition = null, string|null $note = null, User|null $user = null)
     {
         parent::__construct();
-        $this->userid = $userid;
-        $this->health_condition = $health_condition;
+        $this->userId = $userId;
+        $this->healthCondition = $healthCondition;
         $this->note = $note;
+        $this->user = $user;
     }
 
     public function getUserId(): string
     {
-        return $this->userid;
+        return $this->userId;
     }
 
     public function getHealthCondition(): string|null
     {
-        return $this->health_condition == null ? " " : $this->health_condition;
+        return $this->healthCondition == null ? " " : $this->healthCondition;
     }
     public function getNote(): string|null
     {
