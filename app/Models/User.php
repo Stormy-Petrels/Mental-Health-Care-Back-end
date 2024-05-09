@@ -5,17 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
 class User extends BaseModel
 {
-    protected string $userId;
-    protected Role $role;
-    protected string $email;
-    protected string $password;
-    protected string $fullName;
-    protected string $phone;
-    protected string $address;
-    protected ?string $urlImage;
+    private string $userId;
+    private Role $role;
+    private string $email;
+    private string $password;
+    private string $fullName;
+    private string $phone;
+    private string $address;
+    private string|null $urlImage;
 
     public function __construct(
         Role $role,
@@ -24,7 +23,7 @@ class User extends BaseModel
         string $fullName,
         string $phone,
         string $address,
-        ?string $urlImage = null
+        string|null $urlImage = null
     ) {
         parent::__construct();
         $this->role = $role;
@@ -85,19 +84,14 @@ class User extends BaseModel
         $this->phone = $phone;
     }
 
-    public function getUrlImage(): ?string
+    public function getUrlImage(): string
     {
-        return $this->urlImage;
+        return $this->urlImage == null ? "" : $this->urlImage;
     }
 
-    public function setUrlImage(?string $urlImage): void
+    public function setUrlImage(string $urlImage): void
     {
         $this->urlImage = $urlImage;
-    }
-
-    public function getUserId(): string
-    {
-        return $this->userId;
     }
 
     public function setUserId(string $userId): void
