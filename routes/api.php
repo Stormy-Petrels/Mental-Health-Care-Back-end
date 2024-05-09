@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,3 +35,5 @@ Route::post('/profile/{id}', [PatientController::class, 'update']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+
+Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsers']);
