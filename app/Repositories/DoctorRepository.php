@@ -32,8 +32,7 @@ class DoctorRepository
         WHERE users.role = 'doctor' AND doctors.id = '$id'");
 
     if (empty($query)) {
-        // Xử lý trường hợp không tìm thấy kết quả
-        return null; // hoặc ném ra một ngoại lệ, hoặc trả về giá trị mặc định
+        return null;
     }
 
     $result = $query[0];
@@ -73,10 +72,10 @@ class DoctorRepository
                 new User(
                     Role::Doctor,
                     $result->email,
+                    $result->password,
                     $result->fullName,
                     $result->phone,
                     $result->address,
-                    $result->password,
                     $result->urlImage
                 )
             );
@@ -86,4 +85,4 @@ class DoctorRepository
 
         return $doctors;
     }
-}
+}  

@@ -59,7 +59,7 @@ class PatientRepository
     
     public function getPatientById($id)
     {
-        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,patients.id, patients.healthCondition, patients.note
+        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage, patients.id, patients.healthCondition, patients.note
         FROM users
         JOIN patients ON users.id = patients.userId
         WHERE users.role = 'patient' AND patients.id = '$id'");
@@ -74,23 +74,25 @@ class PatientRepository
 
     public function updatePatient(User $user, Patient $patient)
     {
-        $user_sql = "UPDATE users SET name = ?, password = ?, phone = ?, address = ? WHERE id = ?";
-        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ?  WHERE userId = ?";
+        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, phone = ?, address = ?, urlImage = ? WHERE id = ?";
+        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
 
-        $user = DB::update($user_sql, [
-            $user->getFullName(),
+        $user_updated = DB::update($user_sql, [
+            $user->getEmail(),
             $user->getPassword(),
+            $user->getFullName(),
             $user->getPhone(),
             $user->getAddress(),
+            $user->getUrlImage(),
             $patient->getUserId()
         ]);
 
-        $patient = DB::update($patient_sql, [
+        $patient_updated = DB::update($patient_sql, [
             $patient->getHealthCondition(),
             $patient->getNote(),
             $patient->getUserId()
         ]);
 
-        return $patient;
+        return $patient_updated;
     }
 }
