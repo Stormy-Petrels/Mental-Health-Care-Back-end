@@ -54,11 +54,12 @@ class DoctorRepository
                 new User(
                     Role::Doctor,
                     $result->email,
+                    $result->password,
                     $result->fullName,
                     $result->phone,
                     $result->address,
-                    $result->password,
-                    $result->urlImage
+                    $result->urlImage,
+                    $result->isActive,
                 )
             );
     

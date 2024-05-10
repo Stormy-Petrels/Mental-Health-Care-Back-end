@@ -15,6 +15,7 @@ class User extends BaseModel
     private string $phone;
     private string $address;
     private string|null $urlImage;
+    private string|null $isActive;
 
     public function __construct(
         Role $role,
@@ -23,7 +24,8 @@ class User extends BaseModel
         string $fullName,
         string $phone,
         string $address,
-        string|null $urlImage = null
+        string|null $urlImage = null,
+        string|null $isActive = null
     ) {
         parent::__construct();
         $this->role = $role;
@@ -33,6 +35,7 @@ class User extends BaseModel
         $this->phone = $phone;
         $this->address = $address;
         $this->urlImage = $urlImage;
+        $this->isActive = $isActive;
     }
     public function getRole(): Role
     {
@@ -102,5 +105,10 @@ class User extends BaseModel
     public function setEmail(string $email): void
     {
         $this->email = $email;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->isActive;
     }
 }
