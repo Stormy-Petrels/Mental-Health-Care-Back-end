@@ -34,3 +34,4 @@ Route::post('/profile/{id}', [PatientController::class, 'update']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);

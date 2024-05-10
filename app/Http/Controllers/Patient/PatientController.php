@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Patient;
 
+use App\Dtos\Admin\DoctorRes;
 use App\Http\Controllers\Controller;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\Request;
@@ -12,14 +13,17 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Dtos\Patient\ProfileRes;
+use App\Repositories\DoctorRepository;
 
 class PatientController extends Controller
 {
     private $patientRepository;
+    private $doctorRepository;
 
-    public function __construct(PatientRepository $patientRepository)
+    public function __construct(PatientRepository $patientRepository, DoctorRepository $doctorRepository)
     {
         $this->patientRepository = $patientRepository;
+        $this->doctorRepository = $doctorRepository;
     }
     public function index($id)
     {
@@ -97,4 +101,30 @@ class PatientController extends Controller
             return redirect('/profile/' . $id)->with('success', 'Patient updated successfully');
         }
     }
+
+    public function viewListDoctors()
+    {
+        $doctors = $this->doctorRepository->queryAllDoctors();
+        $doctorResponses = [];
+
+        foreach ($doctors as $doctor) {
+            $doctorResponses[] = new DoctorRes(
+                $doctor->getUserId(),
+                $doctor->getDescription(),
+                $doctor->getMajor(),
+                $doctor->user->getEmail(),
+                $doctor->user->getFullName(),
+                $doctor->user->getPassword(),
+                $doctor->user->getFullName(),
+                $doctor->user->getAddress(),
+                $doctor->user->getPhone(),
+                $doctor->user->getUrlImage()
+            );
+        }
+
+        return response()->json([
+            'message' => 'Successfully ',
+            'payload' => $doctorResponses
+        ]);
+}
 }
