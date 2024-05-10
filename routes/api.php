@@ -26,14 +26,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
-Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::post("/sign-up",  [SignUpController::class, 'signUp']);
 
-
-Route::post("/sign-in",  [SignInController::class, 'signIn']);
 Route::get('/profile/{id}', [PatientController::class, 'index']);
 Route::post('/profile/{id}', [PatientController::class, 'update']);
+Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
+Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
