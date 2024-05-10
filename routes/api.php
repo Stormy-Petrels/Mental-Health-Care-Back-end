@@ -39,4 +39,5 @@ Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
 
-Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsers']);
+Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
+Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);

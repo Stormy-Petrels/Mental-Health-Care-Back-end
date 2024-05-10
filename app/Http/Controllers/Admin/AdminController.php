@@ -16,24 +16,25 @@ class AdminController extends Controller
         $this->usersRepository = new UserRepository();
     }
 
-    public function updateStatusUsers(Request $request, $userId)
+    public function updateStatusUsersActive($userId)
     {
-        if ($request->status == "Active") {
-            $result = $this->usersRepository->updateStatusUsersActive($userId);
+        $result = $this->usersRepository->updateStatusUsersActive($userId);
 
-            $user = new StatusRes($result->getRole()->getValue(), $result->getEmail(), $result->getFullName(), "1");
-            return response([
-                'message' => "Updated successfully status user (active)",
-                'User' => $user,
-            ]);
-        } else {
-            $result = $this->usersRepository->updateStatusUsersInactive($userId);
+        $user = new StatusRes($result->getRole()->getValue(), $result->getEmail(), $result->getFullName(), "1");
+        return response([
+            'message' => "Updated successfully status user (active)",
+            'User' => $user,
+        ]);
+    }
+
+    public function updateStatusUsersInactive($userId)
+    {
+        $result = $this->usersRepository->updateStatusUsersInactive($userId);
 
             $user = new StatusRes($result->getRole()->getValue(), $result->getEmail(), $result->getFullName(), "0");
             return response([
                 'message' => "Updated successfully status user (blocked)",
                 'User' => $user,
             ]);
-        }
     }
 }
