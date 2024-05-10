@@ -20,7 +20,7 @@ class User extends BaseModel
         Role $role,
         string $email,
         string $password,
-        string $fullName,
+        string|null $fullName,
         string $phone,
         string $address,
         string|null $urlImage = null
@@ -29,7 +29,7 @@ class User extends BaseModel
         $this->role = $role;
         $this->email = $email;
         $this->password = $password;
-        $this->fullName = $fullName;
+        $this->fullName = $fullName ?? '';
         $this->phone = $phone;
         $this->address = $address;
         $this->urlImage = $urlImage;
