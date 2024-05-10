@@ -25,7 +25,7 @@ class DoctorRepository
 
     public function getDoctorById(string $id)
     {
-        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
+        $query = DB::select("SELECT users.id AS userId, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
         FROM users
         JOIN doctors ON users.id = doctors.userId
         JOIN majors ON doctors.majorId = majors.id
