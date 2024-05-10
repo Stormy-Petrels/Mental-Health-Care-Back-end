@@ -8,6 +8,7 @@ use App\Http\Controllers\Common\SignInController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminDoctorController;
+use App\Http\Controllers\Patient\AppoinmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,5 @@ Route::post('/profile/{id}', [PatientController::class, 'update']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+
+Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
