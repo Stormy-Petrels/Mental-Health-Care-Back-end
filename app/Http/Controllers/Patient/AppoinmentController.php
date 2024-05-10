@@ -45,12 +45,12 @@ class AppoinmentController extends Controller
 
     public function appoinment(AppoinmentReq $req)
     {
-        if ($req->id == "") {
+        if ($req->CalendarId == "") {
             return response()->json([
                 'message' => 'Appointment failed',
             ], 404);
         }
-        $newBooking = new Appoinment($req->patientId, $req->doctorId, $req->date, $req->id);
+        $newBooking = new Appoinment($req->patientId, $req->doctorId, $req->date, $req->CalendarId);
         $this->appoinmentRepository->insert($newBooking);
         return response()->json([
             'message' => 'You have successfully booked your appointment',

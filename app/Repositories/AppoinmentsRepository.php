@@ -12,7 +12,7 @@ class AppoinmentsRepository
 
     public function insert(Appoinment $appoinment)
     {
-        $sql = "INSERT INTO $this->tableName (id,patientId,doctorId,dateBooking,timeId) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id,patientId,doctorId,dateBooking,calendarId) VALUES (?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $appoinment->getId(),
             $appoinment->getPatientId(),
