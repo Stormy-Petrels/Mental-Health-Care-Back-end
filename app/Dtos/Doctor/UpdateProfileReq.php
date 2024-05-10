@@ -13,7 +13,6 @@ class UpdateProfileReq
     public string $image;
     public string $description;
     public string $majorId;
-
     public function __construct(Request $req)
     {
         $this->id = $req->id;
@@ -26,7 +25,6 @@ class UpdateProfileReq
         $this->description = $req->description;
         $this->majorId = $req->majorId;
     }
-
     public function rules(): array
     {
         return [
