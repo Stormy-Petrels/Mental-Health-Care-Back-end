@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Dtos\Admin\DoctorReq;
 use App\Models\Doctor;
 use App\Models\User;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 
@@ -43,9 +45,9 @@ class DoctorRepository
             JOIN majors ON doctors.majorId = majors.id
             WHERE users.role = 'doctor'
         ");
-    
+
         $doctors = [];
-    
+
         foreach ($results as $result) {
             $doctor = new Doctor(
                 $result->doctor_id,
@@ -61,10 +63,41 @@ class DoctorRepository
                     $result->urlImage
                 )
             );
-    
+
             $doctors[] = $doctor;
         }
-    
+
         return $doctors;
+    }
+
+    public function createDoctor($user, $doctor)
+    {
+        $sql = "INSERT INTO users (id, role, fullName, email, password, phone, address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        DB::insert($sql, [
+            $user->getId(),
+            $user->getRole()->getValue(),
+            $user->getFullname(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getPhone(),
+            $user->getAddress(),
+            Carbon::now(),
+            Carbon::now()
+        ]);
+
+        $sqlInsertDoctor = "INSERT INTO doctors (id, userId, description, majorId, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?);";
+        DB::insert($sqlInsertDoctor, [
+            $user->getId(),
+            $user->getId(),
+            $doctor->getDescription(),
+            $doctor->getMajor(),
+            Carbon::now(),
+            Carbon::now()
+        ]);
+
+        $sql = "SELECT * FROM users JOIN doctors ON users.id = doctors.userId WHERE users.id = ?";
+        $newUserResult = DB::select($sql, [$user->getId()]);
+        return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User (Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->phone, $newUserResult[0]->address, $newUserResult[0]->urlImage));
     }
 }

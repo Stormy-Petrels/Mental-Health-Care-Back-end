@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Dtos\Admin\DoctorReq;
 use App\Repositories\DoctorRepository;
 use App\Dtos\Admin\DoctorRes;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Doctor;
 
 /**
  * @OA\Get(
@@ -52,5 +55,32 @@ class AdminDoctorController extends Controller
             'message' => 'Successfully',
             'payload' => $doctorResponses
         ]);
+    }
+
+    public function createDoctor(DoctorReq $request)
+    {
+        $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->phone, $request->address, $request->urlImage);
+
+        $doctor = new Doctor($user->getId(), $request->description, $request->major);
+
+        $result = $this->doctorRepository->createDoctor($user, $doctor);
+
+        $resultF = new DoctorRes(
+            $result->getUserId(),
+            $result->getDescription(),
+            $result->getMajor(),
+            $user->getEmail(),
+            $user->getFullName(),
+            $user->getPassword(),
+            $user->getAddress(),
+            $user->getPhone(),
+            $user->getUrlImage(),
+            "1",
+        );
+
+        return response()->json([
+            'message' => 'Add doctor Successfully',
+            'payload' => $resultF
+        ], 200);
     }
 }

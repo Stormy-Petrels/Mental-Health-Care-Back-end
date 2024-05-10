@@ -13,7 +13,7 @@ class DoctorRes
     public string $address;
     public string $phone;
     public string $image;
-
+    public string $isActive;
     /**
      * @param string $id
      * @param string $role
@@ -21,7 +21,7 @@ class DoctorRes
      * @param string $fullName
      */
 
-    public function __construct(string $id,string $description,string $major, string $email, string $fullName, string $password, string $address, string $phone, string $image)
+    public function __construct(string $id,string $description,string $major, string $email, string $fullName, string $password, string $address, string $phone, string $image, string $isActive)
     {
         $this->id = $id;
         $this->description = $description;
@@ -32,5 +32,6 @@ class DoctorRes
         $this->address = $address;
         $this->phone = $phone;
         $this->image = $image;
+        $this->isActive = $isActive;
     }
 }
