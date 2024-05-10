@@ -1,8 +1,8 @@
 <?php
-namespace App\Dtos\Doctor;
-
+namespace App\Dtos\Patient;
 use Illuminate\Http\Request;
-class UpdateProfileReq
+
+class UpdateProfileRes
 {
     public string $id;
     public string $email;
@@ -11,8 +11,8 @@ class UpdateProfileReq
     public string $address;
     public string $phone;
     public string $image;
-    public string $description;
-    public string $majorId;
+    public ?string $healthCondition;
+    public ?string $note;
 
     public function __construct(Request $req)
     {
@@ -23,21 +23,21 @@ class UpdateProfileReq
         $this->address = $req->address;
         $this->phone = $req->phone;
         $this->image = $req->image;
-        $this->description = $req->description;
-        $this->majorId = $req->majorId;
+        $this->healthCondition = $req->healthCondition ?? '';
+        $this->note = $req->note ?? '';
     }
     public function rules(): array
     {
         return [
             'id' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:6',
-            'fullName' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
+            'password' => 'nullable|string|min:6',
+            'fullName' => 'required|string',
+            'address' => 'required|string',
+            'phone' => 'required|string',
             'image' => 'nullable|url',
-            'description' => 'nullable',
-            'majorId' =>'required'
+            'healthCondition' => 'nullable|string',
+            'note' =>'nullable|string'
         ];
     }
 }

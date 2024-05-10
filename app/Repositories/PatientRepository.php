@@ -30,7 +30,7 @@ class PatientRepository
 
     public function getInformationPatients()
     {
-        $results = DB::select("SELECT u.urlImage, u.fullName, u.email, u.phone, u.password, u.address, p.healthCondition, p.note, p.userId as patientId
+        $results = DB::select("SELECT u.email, u.password, u.fullName, u.address, u.phone, u.urlImage, p.healthCondition, p.note, p.userId as patientId
             FROM $this->tableName p
             JOIN users u ON p.userId = u.id;");
 
@@ -46,8 +46,8 @@ class PatientRepository
                     $result->email,
                     $result->password,
                     $result->fullName,
-                    $result->phone,
                     $result->address,
+                    $result->phone,
                     $result->urlImage
                 )
             );
@@ -59,7 +59,7 @@ class PatientRepository
     
     public function getPatientById($id)
     {
-        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage, patients.id, patients.healthCondition, patients.note
+        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.password, users.fullName, users.address, users.phone, users.urlImage, patients.id, patients.healthCondition, patients.note
         FROM users
         JOIN patients ON users.id = patients.userId
         WHERE users.role = 'patient' AND patients.id = '$id'");
@@ -68,31 +68,50 @@ class PatientRepository
             $result->id,
             $result->healthCondition,
             $result->note,
-            new User(Role::Patient, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage)
+            new User(Role::Patient, $result->email, $result->password, $result->fullName, $result->address, $result->phone, $result->urlImage)
         );
     }
 
-    public function updatePatient(User $user, Patient $patient)
+    public function updatePatient(User $user, Patient $patient, string $id)
     {
-        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, phone = ?, address = ?, urlImage = ? WHERE id = ?";
+        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
         $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
-
-        $user_updated = DB::update($user_sql, [
+  
+        DB::update($user_sql, [
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getPhone(),
             $user->getAddress(),
+            $user->getPhone(),
             $user->getUrlImage(),
-            $patient->getUserId()
+            $id
         ]);
-
-        $patient_updated = DB::update($patient_sql, [
+        DB::update($patient_sql, [
             $patient->getHealthCondition(),
             $patient->getNote(),
-            $patient->getUserId()
+            $id
         ]);
 
-        return $patient_updated;
+        $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
+        $newInformationPatient = DB::selectOne("
+            SELECT patients.id, patients.healthCondition, patients.note
+            FROM patients
+            WHERE patients.userId = ?", [$id]
+        );
+
+        return new Patient(
+            $newInformationPatient->id,
+            $newInformationPatient->healthCondition,
+            $newInformationPatient->note,
+            new User(
+                Role::Patient,
+                $newInformationUser->email,
+                $newInformationUser->password,
+                $newInformationUser->fullName,
+                $newInformationUser->address,
+                $newInformationUser->phone,
+                $newInformationUser->urlImage
+            )
+        );
     }
 }

@@ -54,7 +54,7 @@ Route::post("/sign-up",  [SignUpController::class, 'signUp']);
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
 
 Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
-Route::post('/profile/{id}', [PatientController::class, 'updateProfile']);
+Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
 
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
