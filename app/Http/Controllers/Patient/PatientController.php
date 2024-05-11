@@ -24,25 +24,25 @@ class PatientController extends Controller
         $this->patientRepository = $patientRepository;
     }
 
-/**
- * @OA\Schema(
- *     schema="PatientProfileUpdateRequest",
- *     required={"name", "email"},
- *     @OA\Property(
- *         property="name",
- *         type="string",
- *         example="John Doe",
- *         description="The name of the patient"
- *     ),
- *     @OA\Property(
- *         property="email",
- *         type="string",
- *         format="email",
- *         example="johndoe@example.com",
- *         description="The email address of the patient"
- *     )
- * )
- */
+    /**
+     * @OA\Schema(
+     *     schema="PatientProfileUpdateRequest",
+     *     required={"name", "email"},
+     *     @OA\Property(
+     *         property="name",
+     *         type="string",
+     *         example="John Doe",
+     *         description="The name of the patient"
+     *     ),
+     *     @OA\Property(
+     *         property="email",
+     *         type="string",
+     *         format="email",
+     *         example="johndoe@example.com",
+     *         description="The email address of the patient"
+     *     )
+     * )
+     */
     public function profilePatient($id)
     {
         $patient = $this->patientRepository->getPatientById($id);
@@ -103,7 +103,8 @@ class PatientController extends Controller
      *         description="Patient not found"
      *     )
      * )
-    */
+     */
+
     public function updateProfilePatient(UpdateProfileRes $req)
     {
         $user = new User(
@@ -135,48 +136,5 @@ class PatientController extends Controller
                 $patient->getNote()
             )
         ]);
-    }
-
-    public function updatePatient(User $user, Patient $patient, string $id)
-    {
-        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
-        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
-
-        DB::update($user_sql, [
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getFullName(),
-            $user->getAddress(),
-            $user->getPhone(),
-            $user->getUrlImage(),
-            $id
-        ]);
-        DB::update($patient_sql, [
-            $patient->getHealthCondition(),
-            $patient->getNote(),
-            $id
-        ]);
-
-        $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
-        $newInformationPatient = DB::selectOne("
-            SELECT patients.id, patients.healthCondition, patients.note
-            FROM patients
-            WHERE patients.userId = ?", [$id]
-        );
-
-        return new Patient(
-            $newInformationPatient->id,
-            $newInformationPatient->healthCondition,
-            $newInformationPatient->note,
-            new User(
-                Role::Patient,
-                $newInformationUser->email,
-                $newInformationUser->password,
-                $newInformationUser->fullName,
-                $newInformationUser->address,
-                $newInformationUser->phone,
-                $newInformationUser->urlImage
-            )
-        );
     }
 }
