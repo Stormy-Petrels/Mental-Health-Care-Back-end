@@ -6,14 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Repositories\DoctorRepository;
 use App\Dtos\Doctor\ProfileReq;
 use App\Dtos\Doctor\ProfileRes;
+use App\Dtos\Patient\PatientReq;
+use App\Models\Patient;
+use App\Repositories\PatientRepository;
 
 class DoctorController extends Controller
 {
     private DoctorRepository $doctorRepository;
+    private PatientRepository $patientRepository;
 
     public function __construct()
     {
         $this->doctorRepository = new DoctorRepository();
+        $this->patientRepository = new PatientRepository();
     }
     
     public function profileDoctor($id){
@@ -36,5 +41,16 @@ class DoctorController extends Controller
             )
             ]
         );
+    }
+
+    function updateHealthCondition(PatientReq $request ,$userId) 
+    {
+        $patient = new Patient($userId, $request->healthCondition, $request->note);
+        $patientResult = $this->patientRepository->updateHealthCondition($patient ,$userId);
+
+        return response()->json([
+           'message' => 'Successfully',
+            'payload' => $patientResult
+        ]);
     }
 }

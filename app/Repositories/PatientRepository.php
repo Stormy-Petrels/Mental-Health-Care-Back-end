@@ -63,4 +63,28 @@ class PatientRepository
 
         return $patient;
     }
+
+    public function updateHealthCondition(Patient $patient, $userId)
+    {
+        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
+  
+        DB::update($patient_sql, [
+            $patient->getHealthCondition(),
+            $patient->getNote(),
+            $userId
+        ]);
+
+        $newPatient = DB::selectOne("
+        SELECT users.*, patients.id, patients.healthCondition, patients.note
+        FROM users
+        JOIN patients ON users.id = patients.userId
+        WHERE users.id = ?", [$userId]
+        );
+
+        return new Patient(
+            $newPatient->id,
+            $newPatient->healthCondition,
+            $newPatient->note
+        );
+    }
 }
