@@ -7,20 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends BaseModel                          
 {
-    public string $userid;
+    public string $userId;
     public string $description;
     public string|null $major;
     public User|null $user;
 
     /**
-     * @param string $userid
+     * @param string $userId
      * @throws \Exception
      */
     
-    public function __construct(string $userid, string $description,string|null $major = null, User|null $user = null)
+    public function __construct(string $userId, string $description,string|null $major = null, User|null $user = null)
     {
         parent::__construct();
-        $this->userid = $userid;
+        $this->userId = $userId;
         $this->description = $description;
         $this->major = $major;
         $this->user = $user;
@@ -28,7 +28,7 @@ class Doctor extends BaseModel
     
     public function getUserId(): string
     {
-        return $this->userid;
+        return $this->userId;
     }
 
     public function getDescription(): string

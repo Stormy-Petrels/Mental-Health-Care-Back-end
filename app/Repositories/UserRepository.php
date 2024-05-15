@@ -12,19 +12,20 @@ class UserRepository
 
     public function insert(User $user)
     {
-        $sql = "INSERT INTO $this->tableName (id, role, fullName, email, password, phone, address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
             $user->getRole()->getValue(),
-            $user->getFullname(),
             $user->getEmail(),
             $user->getPassword(),
-            $user->getPhone(),
+            $user->getFullName(),
             $user->getAddress(),
+            $user->getPhone(),
             Carbon::now(),
             Carbon::now()
         ]);
     }
+
     public function selectAll()
     {
     }
@@ -57,8 +58,8 @@ class UserRepository
                 $newUser->email,
                 $newUser->password,
                 $newUser->fullName,
-                $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->address == null ? "" : $newUser->address,
+                $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->urlImage == null ? "" : $newUser->urlImage
             );
         }
