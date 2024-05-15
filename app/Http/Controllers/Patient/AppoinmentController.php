@@ -34,7 +34,8 @@ class AppoinmentController extends Controller
                 $time->id,
                 $time->timeStart,
                 $time->timeEnd,
-                $time->price
+                $time->price,
+                $time->id
             );
         });
         return response()->json([

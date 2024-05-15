@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->string('id', 200)->unique()->primary();
-            $table->enum('role', ['admin', 'doctor', 'patient'])->notNull();
+            $table->enum('role', ['admin', 'doctor', 'patient','cashier'])->notNull();
             $table->string('email', 200)->unique()->notNull();
             $table->string('password', 200)->notNull();
             $table->string('fullName', 200)->notNull();

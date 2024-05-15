@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('listTimeDoctors', function (Blueprint $table) {
             $table->string('id', 200)->unique()->primary();
             $table->index('id', 'idxListTimeDoctorId');
-            $table->string('duration')->notNull();
-            $table->time('date')->notNull();
+            $table->string('timeStart')->notNull();
+            $table->string('timeEnd')->notNull();
             $table->decimal('price', 10, 2)->nullable();
             $table->timestamps();
         });
