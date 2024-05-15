@@ -10,7 +10,6 @@ class ProfileReq
     {
         $this->id = $req->input("id");
     }
-
     public function rules(): array
     {
         return [
