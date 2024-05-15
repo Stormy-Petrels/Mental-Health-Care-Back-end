@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Patient;
 use App\Dtos\Patient\ViewInformationDoctorRes;
 use App\Http\Controllers\Controller;
 use App\Repositories\PatientRepository;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Session;
@@ -14,6 +13,8 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Dtos\Patient\ProfileRes;
+use App\Dtos\Patient\UpdateProfileRes;
+use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
 
 class PatientController extends Controller
@@ -26,6 +27,26 @@ class PatientController extends Controller
         $this->patientRepository = new PatientRepository();
         $this->doctorRepository = new DoctorRepository();
     }
+
+    /**
+     * @OA\Schema(
+     *     schema="PatientProfileUpdateRequest",
+     *     required={"name", "email"},
+     *     @OA\Property(
+     *         property="name",
+     *         type="string",
+     *         example="John Doe",
+     *         description="The name of the patient"
+     *     ),
+     *     @OA\Property(
+     *         property="email",
+     *         type="string",
+     *         format="email",
+     *         example="johndoe@example.com",
+     *         description="The email address of the patient"
+     *     )
+     * )
+     */
     public function profilePatient($id)
     {
         $patient = $this->patientRepository->getPatientById($id);
@@ -39,8 +60,8 @@ class PatientController extends Controller
             'data' => new ProfileRes(
                 $patient->getId(),
                 $patient->user->getEmail(),
-                $patient->user->getFullName(),
                 $patient->user->getPassword(),
+                $patient->user->getFullName(),
                 $patient->user->getAddress(),
                 $patient->user->getPhone(),
                 $patient->user->getUrlImage(),
@@ -50,67 +71,73 @@ class PatientController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/profile/{id}",
+     *     operationId="updateProfilePatient",
+     *     tags={"Patient"},
+     *     summary="Update patient profile",
+     *     description="Update the profile of a specific patient",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the patient",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(ref="#/components/schemas/PatientProfileUpdateRequest")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Profile updated successfully",
+     *         @OA\MediaType(
+     *             mediaType="application/json"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Patient not found"
+     *     )
+     * )
+     */
 
-    public function updateProfile(Request $request, string $id)
+    public function updateProfilePatient(UpdateProfileRes $req)
     {
-        $select = new PatientRepository();
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'newPassword' => 'nullable|string|min:6',
-            'fullName' => 'required|string',
-            'phone' => 'required|string',
-            'address' => 'required|string',
-            'healthCondition' => 'nullable|string',
-            'note' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('/profile/' . $id)
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $password = $request->input('password');
-        $newPassword = $request->input('newPassword');
-        if (!empty($newPassword)) {
-            $password = $newPassword;
-        }
-
-        // Update user information
-        $updateUser = new User(
+        $user = new User(
             Role::Patient,
-            $request->input('email'),
-            $password,
-            $request->input('fullName'),
-            $request->input('phone'),
-            $request->input('address'),
-            $request->input('urlImage') ?? ''
+            $req->email,
+            $req->password,
+            $req->fullName,
+            $req->address,
+            $req->phone,
+            $req->image ?? ''
         );
-        $updatePatient = new Patient(
-            $id,
-            $request->input('healthCondition'),
-            $request->input('note')
+        $patient = new Patient(
+            $req->id,
+            $req->healthCondition,
+            $req->note
         );
-
-        $patient = $select->updatePatient($updateUser, $updatePatient);
-
-        if ($patient != null) {
-            return response()->json([
-                'error' => 'Failed to update patient profile'
-            ], 500);
-        }
+        $patient = $this->patientRepository->updatePatient($user, $patient, $req->id);
         return response()->json([
             'message' => 'Patient profile updated successfully',
             'data' => new ProfileRes(
-                $updatePatient->getId(),
-                $updateUser->getEmail(),
-                $updateUser->getPassword(),
-                $updateUser->getFullName(),
-                $updateUser->getAddress(),
-                $updateUser->getPhone(),
-                $updateUser->getUrlImage(),
-                $updatePatient->getHealthCondition(),
-                $updatePatient->getNote()
+                $patient->getId(),
+                $patient->user->getEmail(),
+                $patient->user->getPassword(),
+                $patient->user->getFullName(),
+                $patient->user->getAddress(),
+                $patient->user->getPhone(),
+                $patient->user->getUrlImage(),
+                $patient->getHealthCondition(),
+                $patient->getNote()
             )
         ]);
     }

@@ -25,13 +25,13 @@ class DoctorRepository
 
     public function getDoctorById(string $id)
     {
-        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
+        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.password, users.fullName, users.address, users.phone, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
         FROM users
         JOIN doctors ON users.id = doctors.userId
         JOIN majors ON doctors.majorId = majors.id
         WHERE users.role = 'doctor' AND doctors.id = '$id'");
         $result = $query[0];
-        return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage));
+        return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor, $result->email, $result->password, $result->fullName, $result->address, $result->phone, $result->urlImage));
     }
 
     public function queryAllDoctors()
@@ -54,10 +54,10 @@ class DoctorRepository
                 new User(
                     Role::Doctor,
                     $result->email,
-                    $result->fullName,
-                    $result->phone,
-                    $result->address,
                     $result->password,
+                    $result->fullName,
+                    $result->address,
+                    $result->phone,
                     $result->urlImage
                 )
             );
@@ -70,14 +70,14 @@ class DoctorRepository
 
     public function updateDoctor(User $user, Doctor $doctor, string $id)
     {
-        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, phone = ?, address = ?, urlImage = ? WHERE id = ?";
+        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
         $doctor_sql = "UPDATE doctors SET description = ?, majorId = ? WHERE userId = ?";
         DB::update($user_sql, [
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getPhone(),
             $user->getAddress(),
+            $user->getPhone(),
             $user->getUrlImage(),
             $id
         ]);
@@ -101,10 +101,10 @@ class DoctorRepository
             new User(
                 Role::Doctor,
                 $newInformationUser->email,
-                $newInformationUser->fullName,
-                $newInformationUser->phone,
-                $newInformationUser->address,
                 $newInformationUser->password,
+                $newInformationUser->fullName,
+                $newInformationUser->address,
+                $newInformationUser->phone,
                 $newInformationUser->urlImage
             )
         );

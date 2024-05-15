@@ -20,7 +20,7 @@ class ProfileRes
      * @param string $email
      * @param string $fullName
      */
-    public function __construct(string $id, string $email, string $fullName, string $password, string $address, string $phone, string $image, string $healthCondition, string $note)
+    public function __construct(string $id, string $email, string $password, string $fullName, string $address, string $phone, string $image, string $healthCondition, string $note)
     {
         $this->id = $id;
         $this->email = $email;

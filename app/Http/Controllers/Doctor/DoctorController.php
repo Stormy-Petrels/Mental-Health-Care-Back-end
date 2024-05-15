@@ -30,14 +30,14 @@ class DoctorController extends Controller
             'message' => 'View profile doctor successfully',
             'payload' => new ProfileRes(
                 $doctor->getUserId(),
-                $doctor->getDescription(),
-                $doctor->getMajor(),
                 $doctor->user->getEmail(),
                 $doctor->user->getPassword(),
                 $doctor->user->getFullName(),
                 $doctor->user->getAddress(),
                 $doctor->user->getPhone(),
                 $doctor->user->getUrlImage(),
+                $doctor->getDescription(),
+                $doctor->getMajor(),
             )
             ]
         );
@@ -50,10 +50,11 @@ class DoctorController extends Controller
             $req->email,
             $req->password,
             $req->fullName,
-            $req->phone,
             $req->address,
+            $req->phone,
             $req->image ?? ''
         );
+
         $doctor = new Doctor(
             $req->id,
             $req->description,
@@ -64,16 +65,16 @@ class DoctorController extends Controller
             'message' => 'Doctor profile updated successfully',
             'data' => new ProfileRes(
                 $doctor->getId(),
-                $doctor->getDescription(),
-                $doctor->getMajor(),
                 $doctor->user->getEmail(),
                 $doctor->user->getPassword(),
                 $doctor->user->getFullName(),
                 $doctor->user->getAddress(),
                 $doctor->user->getPhone(),
                 $doctor->user->getUrlImage(),
+                $doctor->getDescription(),
+                $doctor->getMajor(),
             )
         ]);
     }
+
 }
-   

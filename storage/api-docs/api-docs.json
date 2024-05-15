@@ -22,79 +22,47 @@
                 }
             }
         },
-        "/api/detail/{id}": {
-            "get": {
+        "/profile/{id}": {
+            "post": {
                 "tags": [
-                    "Patients"
+                    "Patient"
                 ],
-                "summary": "View information of a doctor",
-                "operationId": "548fdc29011e42d17de8898018fb9880",
+                "summary": "Update patient profile",
+                "description": "Update the profile of a specific patient",
+                "operationId": "updateProfilePatient",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "Doctor ID",
+                        "description": "ID of the patient",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "type": "integer",
+                            "format": "int64"
                         }
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatientProfileUpdateRequest"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Successful operation",
+                        "description": "Profile updated successfully",
                         "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "View profile doctor successfully"
-                                        },
-                                        "payload": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "string"
-                                                },
-                                                "description": {
-                                                    "type": "string"
-                                                },
-                                                "major": {
-                                                    "type": "string"
-                                                },
-                                                "email": {
-                                                    "type": "string"
-                                                },
-                                                "fullName": {
-                                                    "type": "string"
-                                                },
-                                                "address": {
-                                                    "type": "string"
-                                                },
-                                                "phone": {
-                                                    "type": "string"
-                                                },
-                                                "image": {
-                                                    "type": "string"
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
+                            "application/json": {}
                         }
                     },
                     "404": {
-                        "description": "Doctor not found"
+                        "description": "Patient not found"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/api/patient/signup": {
@@ -188,6 +156,26 @@
                     "role": {
                         "description": "User Role",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PatientProfileUpdateRequest": {
+                "required": [
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the patient",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "The email address of the patient",
+                        "type": "string",
+                        "format": "email",
+                        "example": "johndoe@example.com"
                     }
                 },
                 "type": "object"
