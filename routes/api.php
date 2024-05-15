@@ -52,10 +52,14 @@ Route::prefix('admin')->group(function () {
 });
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
+Route::post("/sign-up",  [SignUpController::class, 'signUp']);
+
+Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
 Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
 Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
 
+Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
 

@@ -1,16 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Mental Health Care API",
-        "description": "API for managing mental health care services",
-        "contact": {
-            "name": "Admin",
-            "email": "admin@example.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "title": "Your super  ApplicationAPI",
         "version": "1.0.0"
     },
     "paths": {
