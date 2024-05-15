@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Patient;
 
+use App\Dtos\Patient\ViewInformationDoctorRes;
 use App\Http\Controllers\Controller;
 use App\Repositories\PatientRepository;
 use Illuminate\Http\Request;
@@ -13,14 +14,17 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Patient;
 use App\Dtos\Patient\ProfileRes;
+use App\Repositories\DoctorRepository;
 
 class PatientController extends Controller
 {
-    private $patientRepository;
+    private PatientRepository $patientRepository;
+    private DoctorRepository $doctorRepository;
 
-    public function __construct(PatientRepository $patientRepository)
+    public function __construct()
     {
-        $this->patientRepository = $patientRepository;
+        $this->patientRepository = new PatientRepository();
+        $this->doctorRepository = new DoctorRepository();
     }
     public function profilePatient($id)
     {
@@ -109,5 +113,25 @@ class PatientController extends Controller
                 $updatePatient->getNote()
             )
         ]);
+    }
+
+    public function ViewInformationDoctor($id){
+        $doctor = $this->doctorRepository->getDoctorById($id);
+        return response()->json(
+            [
+            'message' => 'View profile doctor successfully',
+            'payload' => new ViewInformationDoctorRes(
+                $doctor->getUserId(),
+                $doctor->getDescription(),
+                $doctor->getMajor(),
+                $doctor->user->getEmail(),
+                $doctor->user->getPassword(),
+                $doctor->user->getFullName(),
+                $doctor->user->getAddress(),
+                $doctor->user->getPhone(),
+                $doctor->user->getUrlImage(),
+            )
+            ]
+        );
     }
 }

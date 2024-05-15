@@ -1,16 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Mental Health Care API",
-        "description": "API for managing mental health care services",
-        "contact": {
-            "name": "Admin",
-            "email": "admin@example.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "title": "Your super  ApplicationAPI",
         "version": "1.0.0"
     },
     "paths": {
@@ -29,6 +20,81 @@
                         "description": "Unauthenticated"
                     }
                 }
+            }
+        },
+        "/api/detail/{id}": {
+            "get": {
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "View information of a doctor",
+                "operationId": "548fdc29011e42d17de8898018fb9880",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Doctor ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "View profile doctor successfully"
+                                        },
+                                        "payload": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "major": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "fullName": {
+                                                    "type": "string"
+                                                },
+                                                "address": {
+                                                    "type": "string"
+                                                },
+                                                "phone": {
+                                                    "type": "string"
+                                                },
+                                                "image": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Doctor not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/patient/signup": {
