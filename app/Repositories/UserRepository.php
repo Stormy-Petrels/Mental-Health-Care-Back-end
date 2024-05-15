@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Repositories;
+
 use Illuminate\Support\Carbon;
 use App\Models\Role;
 use App\Models\User;
@@ -37,7 +39,7 @@ class UserRepository
     public function delete(string $id)
     {
     }
-    
+
 
     public function findByEmail($email)
     {
@@ -61,6 +63,48 @@ class UserRepository
                 $newUser->address == null ? "" : $newUser->address,
                 $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->urlImage == null ? "" : $newUser->urlImage
+            );
+        }
+        return null;
+    }
+
+    public function updateStatusUsersActive($userId)
+    {
+        $user = DB::update("UPDATE users SET users.isActive = '1' WHERE users.id = $userId;");
+
+        if ($user > 0) {
+            $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
+            $transferResult = $result[0];
+
+            return new User(
+                $transferResult->role === "patient" ? Role::Patient : ($transferResult->role === "cashier" ? Role::Cashier : Role::Doctor),
+                $transferResult->email,
+                $transferResult->password,
+                $transferResult->fullName,
+                $transferResult->phone == null ? "" : $transferResult->phone,
+                $transferResult->address == null ? "" : $transferResult->address,
+                $transferResult->urlImage == null ? "" : $transferResult->urlImage
+            );
+        }
+        return null;
+    }
+
+    public function updateStatusUsersInactive($userId)
+    {
+        $user = DB::update("UPDATE users SET users.isActive = '0' WHERE users.id = $userId;");
+
+        if ($user > 0) {
+            $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
+            $transferResult = $result[0];
+
+            return new User(
+                $transferResult->role === "patient" ? Role::Patient : ($transferResult->role === "cashier" ? Role::Cashier : Role::Doctor),
+                $transferResult->email,
+                $transferResult->password,
+                $transferResult->fullName,
+                $transferResult->phone == null ? "" : $transferResult->phone,
+                $transferResult->address == null ? "" : $transferResult->address,
+                $transferResult->urlImage == null ? "" : $transferResult->urlImage
             );
         }
         return null;

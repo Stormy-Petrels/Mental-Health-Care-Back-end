@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,4 +65,7 @@ Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+
+Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
+Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
 Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
