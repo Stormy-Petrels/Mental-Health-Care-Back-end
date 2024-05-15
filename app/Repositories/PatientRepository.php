@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Patient;
 use App\Models\User;
+use App\Models\Doctor;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
@@ -27,9 +28,39 @@ class PatientRepository
         $newUser = $result[0];
         return new Patient($newUser->id);
     }
+
+    public function getInformationPatients()
+    {
+        $results = DB::select("SELECT u.email, u.password, u.fullName, u.address, u.phone, u.urlImage, p.healthCondition, p.note, p.userId as patientId
+            FROM $this->tableName p
+            JOIN users u ON p.userId = u.id;");
+
+        $patients = [];
+
+        foreach ($results as $result) {
+            $patient = new Patient(
+                $result->patientId,
+                $result->healthCondition,
+                $result->note,
+                new User(
+                    Role::Patient,
+                    $result->email,
+                    $result->password,
+                    $result->fullName,
+                    $result->address,
+                    $result->phone,
+                    $result->urlImage
+                )
+            );
+            $patients[] = $patient;
+        }
+
+        return $patients;
+    }
+    
     public function getPatientById($id)
     {
-        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,patients.id, patients.healthCondition, patients.note
+        $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.password, users.fullName, users.address, users.phone, users.urlImage, patients.id, patients.healthCondition, patients.note
         FROM users
         JOIN patients ON users.id = patients.userId
         WHERE users.role = 'patient' AND patients.id = '$id'");
@@ -38,29 +69,60 @@ class PatientRepository
             $result->id,
             $result->healthCondition,
             $result->note,
-            new User(Role::Patient, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage)
+            new User(Role::Patient, $result->email, $result->password, $result->fullName, $result->address, $result->phone, $result->urlImage)
         );
     }
 
-    public function updatePatient(User $user, Patient $patient)
+    public function updatePatient(User $user, Patient $patient, string $id)
     {
-        $user_sql = "UPDATE users SET name = ?, password = ?, phone = ?, address = ? WHERE id = ?";
-        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ?  WHERE userId = ?";
-
-        $user = DB::update($user_sql, [
-            $user->getFullName(),
+        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
+        $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
+  
+        DB::update($user_sql, [
+            $user->getEmail(),
             $user->getPassword(),
-            $user->getPhone(),
+            $user->getFullName(),
             $user->getAddress(),
-            $patient->getUserId()
+            $user->getPhone(),
+            $user->getUrlImage(),
+            $id
         ]);
-
-        $patient = DB::update($patient_sql, [
+        DB::update($patient_sql, [
             $patient->getHealthCondition(),
             $patient->getNote(),
-            $patient->getUserId()
+            $id
         ]);
 
-        return $patient;
+        $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
+        $newInformationPatient = DB::selectOne("
+            SELECT patients.id, patients.healthCondition, patients.note
+            FROM patients
+            WHERE patients.userId = ?", [$id]
+        );
+
+        return new Patient(
+            $newInformationPatient->id,
+            $newInformationPatient->healthCondition,
+            $newInformationPatient->note,
+            new User(
+                Role::Patient,
+                $newInformationUser->email,
+                $newInformationUser->password,
+                $newInformationUser->fullName,
+                $newInformationUser->address,
+                $newInformationUser->phone,
+                $newInformationUser->urlImage
+            )
+        );
+    }
+    public function getDoctorById(string $id)
+    {
+        $query = DB::select("SELECT users.id AS userId, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
+        FROM users
+        JOIN doctors ON users.id = doctors.userId
+        JOIN majors ON doctors.majorId = majors.id
+        WHERE users.role = 'doctor' AND doctors.id = '$id'");
+        $result = $query[0];
+        return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage));
     }
 }

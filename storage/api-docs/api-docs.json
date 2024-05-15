@@ -1,16 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Mental Health Care API",
-        "description": "API for managing mental health care services",
-        "contact": {
-            "name": "Admin",
-            "email": "admin@example.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "title": "Your super  ApplicationAPI",
         "version": "1.0.0"
     },
     "paths": {
@@ -27,6 +18,49 @@
                     },
                     "401": {
                         "description": "Unauthenticated"
+                    }
+                }
+            }
+        },
+        "/profile/{id}": {
+            "post": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Update patient profile",
+                "description": "Update the profile of a specific patient",
+                "operationId": "updateProfilePatient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the patient",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PatientProfileUpdateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Profile updated successfully",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Patient not found"
                     }
                 }
             }
@@ -122,6 +156,26 @@
                     "role": {
                         "description": "User Role",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PatientProfileUpdateRequest": {
+                "required": [
+                    "name",
+                    "email"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the patient",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "email": {
+                        "description": "The email address of the patient",
+                        "type": "string",
+                        "format": "email",
+                        "example": "johndoe@example.com"
                     }
                 },
                 "type": "object"
