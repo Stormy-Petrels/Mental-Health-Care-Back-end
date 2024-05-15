@@ -12,8 +12,8 @@ class User extends BaseModel
     private string $email;
     private string $password;
     private string $fullName;
-    private string $phone;
     private string $address;
+    private string $phone;
     private string|null $urlImage;
     private string|null $isActive;
 
@@ -21,9 +21,9 @@ class User extends BaseModel
         Role $role,
         string $email,
         string $password,
-        string $fullName,
-        string $phone,
+        string|null $fullName,
         string $address,
+        string $phone,
         string|null $urlImage = null,
         string|null $isActive = null
     ) {
@@ -31,9 +31,9 @@ class User extends BaseModel
         $this->role = $role;
         $this->email = $email;
         $this->password = $password;
-        $this->fullName = $fullName;
-        $this->phone = $phone;
+        $this->fullName = $fullName ?? '';
         $this->address = $address;
+        $this->phone = $phone;
         $this->urlImage = $urlImage;
         $this->isActive = $isActive;
     }
