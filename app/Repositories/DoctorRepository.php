@@ -58,7 +58,8 @@ class DoctorRepository
                     $result->fullName,
                     $result->address,
                     $result->phone,
-                    $result->urlImage
+                    $result->urlImage,
+                    $result->isActive,
                 )
             );
     
