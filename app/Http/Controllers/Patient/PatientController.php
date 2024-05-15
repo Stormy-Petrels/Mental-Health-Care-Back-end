@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Patient;
 
+use App\Dtos\Admin\DoctorRes;
 use App\Dtos\Patient\ViewInformationDoctorRes;
 use App\Http\Controllers\Controller;
 use App\Repositories\PatientRepository;
@@ -19,13 +20,13 @@ use App\Repositories\DoctorRepository;
 
 class PatientController extends Controller
 {
-    private PatientRepository $patientRepository;
-    private DoctorRepository $doctorRepository;
+    private $patientRepository;
+    private $doctorRepository;
 
-    public function __construct()
+    public function __construct(PatientRepository $patientRepository, DoctorRepository $doctorRepository)
     {
-        $this->patientRepository = new PatientRepository();
-        $this->doctorRepository = new DoctorRepository();
+        $this->patientRepository = $patientRepository;
+        $this->doctorRepository = $doctorRepository;
     }
 
     /**
@@ -161,4 +162,30 @@ class PatientController extends Controller
             ]
         );
     }
+
+    public function viewListDoctors()
+    {
+        $doctors = $this->doctorRepository->queryAllDoctors();
+        $doctorResponses = [];
+
+        foreach ($doctors as $doctor) {
+            $doctorResponses[] = new DoctorRes(
+                $doctor->getUserId(),
+                $doctor->getDescription(),
+                $doctor->getMajor(),
+                $doctor->user->getEmail(),
+                $doctor->user->getFullName(),
+                $doctor->user->getPassword(),
+                $doctor->user->getFullName(),
+                $doctor->user->getAddress(),
+                $doctor->user->getPhone(),
+                $doctor->user->getUrlImage()
+            );
+        }
+
+        return response()->json([
+            'message' => 'Successfully ',
+            'payload' => $doctorResponses
+        ]);
+}
 }
