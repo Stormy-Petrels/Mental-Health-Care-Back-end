@@ -14,8 +14,8 @@ class UserRepository
     {
         $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
-            $user->getRole()->getValue(),
             $user->getId(),
+            $user->getRole()->getValue(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
