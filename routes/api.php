@@ -11,6 +11,7 @@ use App\Http\Controllers\Common\SignInController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminDoctorController;
+use App\Http\Controllers\Patient\AppoinmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,6 +66,8 @@ Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+Route::post('/time', [AppoinmentController::class, 'checkTime']);
+
 
 Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
 Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);

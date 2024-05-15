@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use App\Models\Time;
 
 class DoctorRepository
 {
@@ -69,6 +70,30 @@ class DoctorRepository
         return $doctors;
     }
 
+    public function getAvailableTimesForBooking($selectedDate, $Doctorid)
+    {
+        $query = "SELECT lt.*,c.id
+        FROM calendars AS c
+        JOIN listTimeDoctors AS lt ON c.timeId = lt.id
+        WHERE c.doctorId = '$Doctorid' AND c.date = '$selectedDate'
+          AND NOT EXISTS (
+            SELECT 1
+            FROM appoinments AS a
+            WHERE a.calendarId = c.id
+          );";
+        $result = DB::select($query);
+        $collection = collect($result);
+        $times = $collection->map(function ($time) {
+            return new Time(
+                $time->id,
+                $time->timeStart,
+                $time->timeEnd,
+                $time->price,
+                $time->id
+            );
+        });
+        return $times;
+    }
     public function updateDoctor(User $user, Doctor $doctor, string $id)
     {
         $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
