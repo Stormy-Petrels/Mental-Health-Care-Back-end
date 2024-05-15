@@ -14,7 +14,6 @@ class SignInReq
         $this->email = $request->input("email");
         $this->password = $request->input("password");
     }
-
     public function rules(): array
     {
         return [
