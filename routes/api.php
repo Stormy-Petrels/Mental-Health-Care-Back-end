@@ -54,7 +54,6 @@ Route::prefix('admin')->group(function () {
 });
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
 Route::post("/sign-in",  [SignInController::class, 'signIn']); 
-Route::post("/sign-up",  [SignUpController::class, 'signUp']);
 
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 

@@ -59,7 +59,7 @@ class AdminDoctorController extends Controller
 
     public function createDoctor(DoctorReq $request)
     {
-        $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->phone, $request->address, $request->urlImage);
+        $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->phone, $request->address, $request->urlImage, $request->isActive);
 
         $doctor = new Doctor($user->getId(), $request->description, $request->major);
 
@@ -75,7 +75,7 @@ class AdminDoctorController extends Controller
             $user->getAddress(),
             $user->getPhone(),
             $user->getUrlImage(),
-            "1",
+            $user->getStatus(),
         );
 
         return response()->json([

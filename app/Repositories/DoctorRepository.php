@@ -141,7 +141,7 @@ class DoctorRepository
 
     public function createDoctor($user, $doctor)
     {
-        $sql = "INSERT INTO users (id, role, fullName, email, password, phone, address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO users (id, role, fullName, email, password, phone, address, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
             $user->getRole()->getValue(),
@@ -150,6 +150,8 @@ class DoctorRepository
             $user->getPassword(),
             $user->getPhone(),
             $user->getAddress(),
+            $user->getUrlImage(),
+            $user->getStatus(),
             Carbon::now(),
             Carbon::now()
         ]);
@@ -167,6 +169,6 @@ class DoctorRepository
 
         $sql = "SELECT * FROM users JOIN doctors ON users.id = doctors.userId WHERE users.id = ?";
         $newUserResult = DB::select($sql, [$user->getId()]);
-        return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User(Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->phone, $newUserResult[0]->address, $newUserResult[0]->urlImage));
+        return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User(Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->address, $newUserResult[0]->phone, $newUserResult[0]->urlImage, $newUserResult[0]->isActive));
     }
 }

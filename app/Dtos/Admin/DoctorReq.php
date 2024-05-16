@@ -18,6 +18,7 @@ class DoctorReq extends BaseModel
     public string $description;
     public string $major;
     public string|null $urlImage = null;
+    public string|null $isActive = null;
 
     public function __construct(Request $req)
     {
@@ -30,6 +31,7 @@ class DoctorReq extends BaseModel
         $this->description = $req->input("description");
         $this->major = $req->input("major");
         $this->urlImage = $req->input("urlImage");
+        $this->isActive = $req->input("isActive");
     }
 
     public function rules(): array
@@ -42,7 +44,8 @@ class DoctorReq extends BaseModel
             'address' => 'required',
             'description' => 'required',
             'major' => 'required',
-            'urlImage' => 'required'
+            'urlImage' => 'required',
+            'isActive' => 'required'
         ];
     }
 }
