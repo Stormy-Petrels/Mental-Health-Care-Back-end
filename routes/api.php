@@ -68,7 +68,7 @@ Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoc
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
-
+Route::post('/Admin/createDoctor', [AdminDoctorController::class, 'createDoctor']);
 Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
 Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
 Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
