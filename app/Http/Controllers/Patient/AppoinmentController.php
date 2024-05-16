@@ -16,10 +16,12 @@ use App\Models\Booking;
 class AppoinmentController extends Controller
 {
     private DoctorRepository $doctorRepository;
+    private AppoinmentsRepository $appoinmentRepository;
 
     public function __construct()
     {
         $this->doctorRepository = new DoctorRepository();
+        $this->appoinmentRepository = new AppoinmentsRepository();
     }
 
     
@@ -40,6 +42,20 @@ class AppoinmentController extends Controller
             'message' => 'List time user',
             'listTime' => $Times
         ], 201);
+    }
+
+    public function appoinment(AppoinmentReq $req)
+    {
+        if ($req->CalendarId == "") {
+            return response()->json([
+                'message' => 'Appointment failed',
+            ], 404);
+        }
+        $newBooking = new Appoinment($req->patientId, $req->doctorId, $req->date, $req->CalendarId);
+        $this->appoinmentRepository->insert($newBooking);
+        return response()->json([
+            'message' => 'You have successfully booked your appointment',
+        ], 200);
     }
 
 }

@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\DB;
 
 class AppoinmentsRepository
 {
-    private string $tableName = "booking";
+    private string $tableName = "appoinments";
 
-    public function insert(Appoinment $booking)
+    public function insert(Appoinment $appoinment)
     {
-        $sql = "INSERT INTO $this->tableName (id,patient_id,doctor_id,date_booking,time_id) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id,patientId,doctorId,dateBooking,calendarId) VALUES (?, ?, ?, ?, ?)";
         DB::insert($sql, [
-            $booking->getId(),
-            $booking->getPatientId(),
-            $booking->getDocterId(),
-            $booking->getDate(),
-            $booking->getTimeId()
+            $appoinment->getId(),
+            $appoinment->getPatientId(),
+            $appoinment->getDocterId(),
+            $appoinment->getDate(),
+            $appoinment->getTimeId()
         ]);
     }
 
