@@ -63,7 +63,7 @@ Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient'])
 
 Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
-Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
+Route::post('/updateProfile/doctor/{id}', [DoctorController::class, 'updateProfileDoctor']);
 
 Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
 

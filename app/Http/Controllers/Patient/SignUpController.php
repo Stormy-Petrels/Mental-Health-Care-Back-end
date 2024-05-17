@@ -27,35 +27,28 @@ class SignUpController extends Controller
         return view("patients\signUp");
     }
 
-/**
+   /**
      * @OA\Post(
-     *      path="/api/patient/signup",
+     *      path="/api/sign-up",
      *      operationId="signup",
      *      tags={"Patient"},
      *      summary="Patient SignUp",
      *      description="Register a new Patient",
      *      @OA\RequestBody(
      *          required=true,
-     *          @OA\JsonContent(
-     *              required={"email", "fullName", "password", "phone", "address"},
-     *              @OA\Property(property="email", type="string"),
-     *              @OA\Property(property="fullName", type="string"),
-     *              @OA\Property(property="password", type="string"),
-     *              @OA\Property(property="phone", type="string"),
-     *              @OA\Property(property="address", type="string"),
-     *          )
+     *          @OA\JsonContent(ref="#/components/schemas/SignUpReq")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Successful Operation",
-     *          @OA\JsonContent(ref="#/components/schemas/SignInRes")
+     *          @OA\JsonContent(ref="#/components/schemas/SignInResCommon")
      *      ),
      *      @OA\Response(
      *          response=401,
      *          description="Email already exists",
      *          @OA\JsonContent(
-     *              @OA\Property(property="message", type="string", example="Email already exists"),
-     *              @OA\Property(property="error", type="string", example="email is error")
+     *              @OA\Property(property="message", type="string"),
+     *              @OA\Property(property="error", type="string")
      *          )
      *      )
      * )

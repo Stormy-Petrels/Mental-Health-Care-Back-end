@@ -23,7 +23,32 @@ class SignInController extends Controller
     {
         return view("common\SignIn");
     }
-
+/**
+     * @OA\Post(
+     *     path="/api/sign-in",
+     *     summary="Sign in a user",
+     *     tags={"Common"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/SignInReqCommon")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Sign in Successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="payload", ref="#/components/schemas/SignInResCommon")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="User not found or invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function signIn(SignInReq $req)
     {
         $user = $this->userRepository->findByEmail($req->email);
