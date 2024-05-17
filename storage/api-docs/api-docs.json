@@ -22,6 +22,42 @@
                 }
             }
         },
+        "/api/admin/patients": {
+            "get": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Get list of patients",
+                "description": "Returns list of patients",
+                "operationId": "getPatientsList",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "payload": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/PatientRes"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
         "/profile/{id}": {
             "post": {
                 "tags": [
@@ -155,6 +191,38 @@
                     },
                     "role": {
                         "description": "User Role",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "PatientRes": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "healthCondition": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "image": {
                         "type": "string"
                     }
                 },

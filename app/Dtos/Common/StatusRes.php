@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Dtos\Common;
+namespace App\Dtos\Common;
 
 use App\Models\Role;
 
