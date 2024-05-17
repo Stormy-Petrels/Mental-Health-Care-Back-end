@@ -1,12 +1,10 @@
 <?php
-
 use App\Http\Controllers\Admin\AdminController;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Patient\SignUpController;
 use App\Http\Controllers\Admin\AdminPatientController;
-
 use App\Http\Controllers\Common\SignInController;
 use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
@@ -34,20 +32,14 @@ Route::prefix('admin')->group(function () {
 
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
-        // Route::get('/create', [AdminPatientController::class, 'create'])->name('create');
-        // Route::post('/create', [AdminPatientController::class, 'store'])->name('admin.patients.store');
-        // Route::get('{user_id}/update', [AdminPatientController::class, 'edit'])->name('edit.patient');
-        // Route::put('{user_id}/update', [AdminPatientController::class, 'update'])->name('update.patient');
-        // Route::get('{id}/delete', [AdminPatientController::class, 'destroy'])->name('delete.patient');
+        Route::post('/create', [AdminPatientController::class, 'createPatient']);
+      
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     Route::prefix('doctors')->group(function () {
         Route::get('/', [AdminDoctorController::class, 'getAllDoctors']);
-        // Route::get('/create', [AdminPatientController::class, 'create'])->name('create');
-        // Route::post('/create', [AdminPatientController::class, 'store'])->name('admin.patients.store');
-        // Route::get('{user_id}/update', [AdminPatientController::class, 'edit'])->name('edit.patient');
+        Route::post('/create', [AdminDoctorController::class, 'createDoctor']);
         // Route::put('{user_id}/update', [AdminPatientController::class, 'update'])->name('update.patient');
-        // Route::get('{id}/delete', [AdminPatientController::class, 'destroy'])->name('delete.patient');
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     
@@ -65,7 +57,7 @@ Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor/{id}', [DoctorController::class, 'updateProfileDoctor']);
 
-Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
+// Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
 
 Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
