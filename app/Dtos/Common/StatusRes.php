@@ -5,6 +5,7 @@ namespace App\Dtos\Common;
 use App\Models\Role;
 
 class StatusRes
+
 {
     public string $role;
     public string $email;

@@ -2,17 +2,64 @@
 
 namespace App\Dtos\Common;
 
-class SignInRes
-{
-    public string $roleId;
-    public string $role;
-    public string $email;
-    public string $password;
-    public string $fullName;
-    public string $address;
-    public string $phone;
-    public string $image;
-
+    /**
+     * @OA\Schema(
+     *     schema="SignInResCommon",
+     *     type="object",
+     *     title="SignInRes",
+     *     description="Response object for user sign-in",
+     *     required={"roleId", "role", "email", "fullName", "password", "address", "phone", "image"}
+     * )
+     */
+    class SignInRes
+    {
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $roleId;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $role;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $email;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $password;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $fullName;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $address;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $phone;
+    
+        /**
+         * @OA\Property()
+         * @var string
+         */
+        public string $image;
 
     /**
      * @param string $id
@@ -32,3 +79,5 @@ class SignInRes
         $this->image = $image;
     }
 }
+
+
