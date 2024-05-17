@@ -17,6 +17,7 @@ use App\Models\Patient;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Dtos\Admin\PatientRes;
+use App\Dtos\Admin\PatientReq;
 class AdminPatientController extends Controller
 {
     private $adminRepository;
@@ -52,6 +53,36 @@ class AdminPatientController extends Controller
         return response()->json([
             'message' => 'Successfully',
             'payload' => $patientResponses
+        ]);
+    }
+
+
+   
+
+
+    public function createPatient(PatientReq $request)
+    {   
+        $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->address, $request->phone,  $request->urlImage, $request->isActive);
+        $doctor = new Patient($user->getId(), $request->healthCondition, $request->note);
+        
+        $patient = $this->patientRepository->createPatient($user, $doctor);
+
+        $result = new PatientRes(
+            $patient->getUserId(),
+            $patient->getHealthCondition(),
+            $patient->getNote(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFullName(),
+            $user->getAddress(),
+            $user->getPhone(),
+            $user->getUrlImage(),
+            $user->getStatus(),
+        );
+        return response()->json([
+            'status' => 200,
+            'message' => 'Add new patient successfully',
+            'data' => $result
         ]);
     }
 }
