@@ -17,6 +17,10 @@ use App\Models\Patient;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Dtos\Admin\PatientRes;
+
+
+
+
 class AdminPatientController extends Controller
 {
     private $adminRepository;
@@ -30,7 +34,75 @@ class AdminPatientController extends Controller
         $this->userRepository = $userRepository;
         $this->patientRepository = $patientRepository;
     }
-
+    /**
+     * @OA\Get(
+     *     path="/api/admin/patients",
+     *     summary="Get list of patients",
+     *     description="Returns list of patients",
+     *     operationId="getPatientsList",
+     *     tags={"Patient"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string"
+     *             ),
+     *             @OA\Property(
+     *                 property="payload",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/PatientRes")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden"
+     *     )
+     * )
+     * @OA\Schema(
+     *     schema="PatientRes",
+     *     type="object",
+     *     @OA\Property(
+     *         property="id",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="healthCondition",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="note",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="email",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="password",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="fullName",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="address",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="phone",
+     *         type="string"
+     *     ),
+     *     @OA\Property(
+     *         property="image",
+     *         type="string"
+     *     )
+     * )
+     */
     public function getAllPatients()
     {
         $patients = $this->patientRepository->getInformationPatients();

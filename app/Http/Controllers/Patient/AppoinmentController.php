@@ -24,7 +24,25 @@ class AppoinmentController extends Controller
         $this->appoinmentRepository = new AppoinmentsRepository();
     }
 
-    
+    /**
+     * @OA\Post(
+     *     path="/api/time",
+     *     summary="Check available times for booking",
+     *     tags={"Patient"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/CheckTimeReq")
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="List of available times",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="listTime", type="array", @OA\Items(ref="#/components/schemas/TimeRes"))
+     *         )
+     *     )
+     * )
+     */
     public function checkTime(CheckTimeReq $req)
     {
         $listTime = $this->doctorRepository->getAvailableTimesForBooking($req->date, $req->doctorId);
@@ -44,6 +62,31 @@ class AppoinmentController extends Controller
         ], 201);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/appoinment",
+     *     summary="Create a new appointment",
+     *     tags={"Patient"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/AppoinmentReq")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="You have successfully booked your appointment",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Appointment failed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string")
+     *         )
+     *     )
+     * )
+     */
     public function appoinment(AppoinmentReq $req)
     {
         if ($req->CalendarId == "") {
@@ -57,5 +100,4 @@ class AppoinmentController extends Controller
             'message' => 'You have successfully booked your appointment',
         ], 200);
     }
-
 }
