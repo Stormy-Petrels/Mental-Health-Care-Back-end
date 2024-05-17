@@ -60,7 +60,7 @@ class DoctorRepository
                     $result->address,
                     $result->phone,
                     $result->urlImage,
-                    $result->isActive,
+                    $result->isActive == null ? "1" :"null",
                 )
             );
     

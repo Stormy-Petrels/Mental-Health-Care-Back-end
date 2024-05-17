@@ -5,19 +5,36 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/api/doctors": {
+        "/api/admin/get_doctors": {
             "get": {
                 "tags": [
-                    "Doctors"
+                    "Doctor"
                 ],
                 "summary": "Get all doctors",
-                "operationId": "822344ab2329d71809a283c0f8768d42",
+                "description": "Retrieve a list of all doctors from the database",
+                "operationId": "getAllDoctors",
                 "responses": {
                     "200": {
-                        "description": "Successful operation"
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
+                        "description": "A list of doctors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Successfully"
+                                        },
+                                        "payload": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/DoctorRes"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -448,6 +465,55 @@
     },
     "components": {
         "schemas": {
+            "DoctorRes": {
+                "title": "DoctorRes",
+                "description": "Response object for ",
+                "required": [
+                    "id",
+                    "description",
+                    "major",
+                    "email",
+                    "password",
+                    "fullName",
+                    "address",
+                    "phone",
+                    "image",
+                    "isActive"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "major": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
+                    },
+                    "isActive": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
             "SignInReqCommon": {
                 "title": "SignInReq",
                 "description": "Request object for user sign-in",
