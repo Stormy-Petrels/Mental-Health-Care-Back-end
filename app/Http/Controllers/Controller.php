@@ -9,7 +9,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @OA\Info(
- *    title="Your super  ApplicationAPI",
+ *    title="Mental Health Care Application API",
  *    version="1.0.0",
  * )
  */
