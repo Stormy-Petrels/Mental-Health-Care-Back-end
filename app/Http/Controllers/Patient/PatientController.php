@@ -18,6 +18,12 @@ use App\Dtos\Patient\UpdateProfileRes;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
 
+/**
+ * @OA\Tag(
+ *     name="Patient",
+ *     description="API Endpoints for Patient"
+ * )
+ */
 class PatientController extends Controller
 {
     private $patientRepository;
@@ -30,22 +36,27 @@ class PatientController extends Controller
     }
 
     /**
-     * @OA\Schema(
-     *     schema="PatientProfileUpdateRequest",
-     *     required={"name", "email"},
-     *     @OA\Property(
-     *         property="name",
-     *         type="string",
-     *         example="John Doe",
-     *         description="The name of the patient"
+     * @OA\Get(
+     *     path="/api/profile/{id}",
+     *     summary="View Profile Patient",
+     *     tags={"Patient"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID of the patient to view profile",
+     *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Property(
-     *         property="email",
-     *         type="string",
-     *         format="email",
-     *         example="johndoe@example.com",
-     *         description="The email address of the patient"
-     *     )
+     *     @OA\Response(
+     *         response=200,
+     *         description="View profile patient successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="View profile patient successfully"),
+     *             @OA\Property(property="payload", type="object", ref="#/components/schemas/ProfileRes")
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Patient not found")
      * )
      */
     public function profilePatient($id)
@@ -59,7 +70,7 @@ class PatientController extends Controller
         return response()->json([
             'message' => 'Patient data retrieved successfully',
             'data' => new ProfileRes(
-                $patient->getId(),
+                $patient->getUserId(),
                 $patient->user->getEmail(),
                 $patient->user->getPassword(),
                 $patient->user->getFullName(),
@@ -74,42 +85,35 @@ class PatientController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/profile/{id}",
-     *     operationId="updateProfilePatient",
+     *     path="/api/profile/{id}",
+     *     summary="Update Profile Patient",
      *     tags={"Patient"},
-     *     summary="Update patient profile",
-     *     description="Update the profile of a specific patient",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID of the patient",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *     ),
+     *     security={{"bearerAuth": {}}},
      *     @OA\RequestBody(
      *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(ref="#/components/schemas/PatientProfileUpdateRequest")
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="string", description="ID of the patient"),
+     *             @OA\Property(property="email", type="string", description="Email of the patient"),
+     *             @OA\Property(property="password", type="string", description="Password of the patient"),
+     *             @OA\Property(property="fullName", type="string", description="Full name of the patient"),
+     *             @OA\Property(property="address", type="string", description="Address of the patient"),
+     *             @OA\Property(property="phone", type="string", description="Phone number of the patient"),
+     *             @OA\Property(property="image", type="string", nullable=true, description="Image URL of the patient"),
+     *             @OA\Property(property="healthCondition", type="string", nullable=true, description="HealthCondition of the patient"),
+     *             @OA\Property(property="note", type="string", description="Note of the patient")
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Profile updated successfully",
-     *         @OA\MediaType(
-     *             mediaType="application/json"
+     *         description="Patient profile updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Patient profile updated successfully"),
+     *             @OA\Property(property="data", type="object", ref="#/components/schemas/ProfileRes")
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Patient not found"
-     *     )
+     *     @OA\Response(response=400, description="Invalid input")
      * )
      */
-
     public function updateProfilePatient(UpdateProfileRes $req)
     {
         $user = new User(
@@ -130,7 +134,7 @@ class PatientController extends Controller
         return response()->json([
             'message' => 'Patient profile updated successfully',
             'data' => new ProfileRes(
-                $patient->getId(),
+                $patient->getUserId(),
                 $patient->user->getEmail(),
                 $patient->user->getPassword(),
                 $patient->user->getFullName(),
@@ -142,65 +146,66 @@ class PatientController extends Controller
             )
         ]);
     }
-/**
- * @OA\Get(
- *     path="/api/detail/{id}",
- *     operationId="viewInformationDoctor",
- *     tags={"Patient"},
- *     summary="View information of a doctor",
- *     description="Retrieve information of a specific doctor",
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID of the doctor",
- *         required=true,
- *         @OA\Schema(
- *             type="integer",
- *             format="int64"
- *         )
- *     ),
- *     @OA\Response(
- *         response=200,
- *         description="Doctor information retrieved successfully",
- *         @OA\JsonContent(
- *             @OA\Property(
- *                 property="message",
- *                 type="string",
- *                 example="View profile doctor successfully"
- *             ),
- *             @OA\Property(
- *                 property="payload",
- *                 type="object",
- *                 ref="#/components/schemas/ViewInformationDoctorRes"
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Doctor not found"
- *     )
- * )
- */
-
-    public function ViewInformationDoctor($id){
+    /**
+     * @OA\Get(
+     *     path="/api/detail/{id}",
+     *     operationId="viewInformationDoctor",
+     *     tags={"Patient"},
+     *     summary="View information of a doctor",
+     *     description="Retrieve information of a specific doctor",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the doctor",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer",
+     *             format="int64"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Doctor information retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 example="View profile doctor successfully"
+     *             ),
+     *             @OA\Property(
+     *                 property="payload",
+     *                 type="object",
+     *                 ref="#/components/schemas/ViewInformationDoctorRes"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Patient not found"
+     *     )
+     * )
+     */
+    public function ViewInformationDoctor($id)
+    {
         $doctor = $this->doctorRepository->getDoctorById($id);
         return response()->json(
             [
-            'message' => 'View profile doctor successfully',
-            'payload' => new ViewInformationDoctorRes(
-                $doctor->getUserId(),
-                $doctor->getDescription(),
-                $doctor->getMajor(),
-                $doctor->user->getEmail(),
-                $doctor->user->getPassword(),
-                $doctor->user->getFullName(),
-                $doctor->user->getAddress(),
-                $doctor->user->getPhone(),
-                $doctor->user->getUrlImage(),
-            )
+                'message' => 'View profile doctor successfully',
+                'payload' => new ViewInformationDoctorRes(
+                    $doctor->getUserId(),
+                    $doctor->getDescription(),
+                    $doctor->getMajor(),
+                    $doctor->user->getEmail(),
+                    $doctor->user->getPassword(),
+                    $doctor->user->getFullName(),
+                    $doctor->user->getAddress(),
+                    $doctor->user->getPhone(),
+                    $doctor->user->getUrlImage()
+                )
             ]
         );
     }
+
 
     public function viewListDoctors()
     {
@@ -223,8 +228,8 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'message' => 'Successfully ',
+            'message' => 'Successfully retrieved list of doctors',
             'payload' => $doctorResponses
         ]);
-}
+    }
 }

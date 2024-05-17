@@ -1,13 +1,15 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Your super  ApplicationAPI",
+        "title": "Mental Health Care Application API",
         "version": "1.0.0"
     },
     "paths": {
         "/api/doctors": {
             "get": {
-                "tags": ["Doctors"],
+                "tags": [
+                    "Doctors"
+                ],
                 "summary": "Get all doctors",
                 "operationId": "822344ab2329d71809a283c0f8768d42",
                 "responses": {
@@ -22,7 +24,9 @@
         },
         "/api/admin/patients": {
             "get": {
-                "tags": ["Patient"],
+                "tags": [
+                    "Patient"
+                ],
                 "summary": "Get list of patients",
                 "description": "Returns list of patients",
                 "operationId": "getPatientsList",
@@ -56,7 +60,9 @@
         },
         "/api/sign-in": {
             "post": {
-                "tags": ["Common"],
+                "tags": [
+                    "Common"
+                ],
                 "summary": "Sign in a user",
                 "operationId": "4265ade324d16d3edde63085b173c58a",
                 "requestBody": {
@@ -108,7 +114,9 @@
         },
         "/api/doctor/profile/{id}": {
             "get": {
-                "tags": ["Doctor"],
+                "tags": [
+                    "Doctor"
+                ],
                 "summary": "View Profile Doctor",
                 "operationId": "a1d6c0ca4adcb19d50b3291e1008aaef",
                 "parameters": [
@@ -155,7 +163,9 @@
         },
         "/api/updateProfile/doctor/{id}": {
             "post": {
-                "tags": ["Doctor"],
+                "tags": [
+                    "Doctor"
+                ],
                 "summary": "Update Profile Doctor",
                 "operationId": "d76799a9cdfd98dc98d497db915d6283",
                 "requestBody": {
@@ -241,7 +251,9 @@
         },
         "/api/time": {
             "post": {
-                "tags": ["Patient"],
+                "tags": [
+                    "Patient"
+                ],
                 "summary": "Check available times for booking",
                 "operationId": "94bbdb57483a3c3ba5794b7d9b68d786",
                 "requestBody": {
@@ -281,7 +293,9 @@
         },
         "/api/appoinment": {
             "post": {
-                "tags": ["Patient"],
+                "tags": [
+                    "Patient"
+                ],
                 "summary": "Create a new appointment",
                 "operationId": "7224b509df838761a9dbdd8241c1b59a",
                 "requestBody": {
@@ -328,50 +342,146 @@
                 }
             }
         },
-        "/profile/{id}": {
-            "post": {
-                "tags": ["Patient"],
-                "summary": "Update patient profile",
-                "description": "Update the profile of a specific patient",
-                "operationId": "updateProfilePatient",
+        "/api/profile/{id}": {
+            "get": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "View Profile Patient",
+                "operationId": "0282a837b1a7fc83bace0f3ed7f80102",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the patient",
+                        "description": "ID of the patient to view profile",
                         "required": true,
                         "schema": {
-                            "type": "integer",
-                            "format": "int64"
+                            "type": "integer"
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "View profile patient successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "View profile patient successfully"
+                                        },
+                                        "payload": {
+                                            "$ref": "#/components/schemas/ProfileRes"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Patient not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Update Profile Patient",
+                "operationId": "54877cf97aab3c383f79de4436af74b9",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/PatientProfileUpdateRequest"
+                                "properties": {
+                                    "id": {
+                                        "description": "ID of the patient",
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "description": "Email of the patient",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "Password of the patient",
+                                        "type": "string"
+                                    },
+                                    "fullName": {
+                                        "description": "Full name of the patient",
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "description": "Address of the patient",
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "description": "Phone number of the patient",
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "description": "Image URL of the patient",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "healthCondition": {
+                                        "description": "HealthCondition of the patient",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "note": {
+                                        "description": "Note of the patient",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Profile updated successfully",
+                        "description": "Patient profile updated successfully",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Patient profile updated successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/ProfileRes"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
                         }
                     },
-                    "404": {
-                        "description": "Patient not found"
+                    "400": {
+                        "description": "Invalid input"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/detail/{id}": {
             "get": {
-                "tags": ["Patient"],
+                "tags": [
+                    "Patient"
+                ],
                 "summary": "View information of a doctor",
                 "description": "Retrieve information of a specific doctor",
                 "operationId": "viewInformationDoctor",
@@ -408,14 +518,16 @@
                         }
                     },
                     "404": {
-                        "description": "Doctor not found"
+                        "description": "Patient not found"
                     }
                 }
             }
         },
         "/api/sign-up": {
             "post": {
-                "tags": ["Patient"],
+                "tags": [
+                    "Patient"
+                ],
                 "summary": "Patient SignUp",
                 "description": "Register a new Patient",
                 "operationId": "signup",
@@ -467,44 +579,15 @@
             "SignInReqCommon": {
                 "title": "SignInReq",
                 "description": "Request object for user sign-in",
-                "required": ["email", "password"],
+                "required": [
+                    "email",
+                    "password"
+                ],
                 "properties": {
                     "email": {
                         "type": "string"
                     },
                     "password": {
-                        "type": "string"
-                    }
-                },
-                "type": "object"
-            },
-            "PatientRes": {
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "healthCondition": {
-                        "type": "string"
-                    },
-                    "note": {
-                        "type": "string"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "password": {
-                        "type": "string"
-                    },
-                    "fullName": {
-                        "type": "string"
-                    },
-                    "address": {
-                        "type": "string"
-                    },
-                    "phone": {
-                        "type": "string"
-                    },
-                    "image": {
                         "type": "string"
                     }
                 },
@@ -597,7 +680,12 @@
             "AppoinmentReq": {
                 "title": "AppoinmentReq",
                 "description": "Request object for creating an appointment",
-                "required": ["date", "patientId", "doctorId", "CalendarId"],
+                "required": [
+                    "date",
+                    "patientId",
+                    "doctorId",
+                    "CalendarId"
+                ],
                 "properties": {
                     "date": {
                         "description": "Date of the appointment",
@@ -622,7 +710,10 @@
             "CheckTimeReq": {
                 "title": "CheckTimeReq",
                 "description": "Request object for checking available times",
-                "required": ["date", "doctorId"],
+                "required": [
+                    "date",
+                    "doctorId"
+                ],
                 "properties": {
                     "date": {
                         "description": "Date for checking available times",
@@ -631,6 +722,49 @@
                     },
                     "doctorId": {
                         "description": "ID of the doctor",
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "ProfileResPatient": {
+                "title": "ProfileRes",
+                "description": "Profile Response DTO",
+                "properties": {
+                    "id": {
+                        "description": "Doctor ID",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Doctor Email",
+                        "type": "string"
+                    },
+                    "password": {
+                        "description": "Doctor Password",
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "description": "Doctor Full Name",
+                        "type": "string"
+                    },
+                    "address": {
+                        "description": "Doctor Address",
+                        "type": "string"
+                    },
+                    "phone": {
+                        "description": "Doctor Phone",
+                        "type": "string"
+                    },
+                    "image": {
+                        "description": "Doctor Image URL",
+                        "type": "string"
+                    },
+                    "healthCondition": {
+                        "description": "Patient healthCondition",
+                        "type": "string"
+                    },
+                    "note": {
+                        "description": "Patient Major",
                         "type": "string"
                     }
                 },
@@ -755,19 +889,34 @@
                 },
                 "type": "object"
             },
-            "PatientProfileUpdateRequest": {
-                "required": ["name", "email"],
+            "PatientRes": {
                 "properties": {
-                    "name": {
-                        "description": "The name of the patient",
-                        "type": "string",
-                        "example": "John Doe"
+                    "id": {
+                        "type": "string"
+                    },
+                    "healthCondition": {
+                        "type": "string"
+                    },
+                    "note": {
+                        "type": "string"
                     },
                     "email": {
-                        "description": "The email address of the patient",
-                        "type": "string",
-                        "format": "email",
-                        "example": "johndoe@example.com"
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "address": {
+                        "type": "string"
+                    },
+                    "phone": {
+                        "type": "string"
+                    },
+                    "image": {
+                        "type": "string"
                     }
                 },
                 "type": "object"
@@ -778,6 +927,10 @@
         {
             "name": "Doctor",
             "description": "API Endpoints for Doctor"
+        },
+        {
+            "name": "Patient",
+            "description": "API Endpoints for Patient"
         }
     ]
 }

@@ -123,7 +123,7 @@ class DoctorController extends Controller
         return response()->json([
             'message' => 'Doctor profile updated successfully',
             'data' => new ProfileRes(
-                $doctor->getId(),
+                $doctor->getUserId(),
                 $doctor->user->getEmail(),
                 $doctor->user->getPassword(),
                 $doctor->user->getFullName(),
