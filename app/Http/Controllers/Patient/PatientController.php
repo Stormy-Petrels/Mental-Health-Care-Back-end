@@ -142,6 +142,45 @@ class PatientController extends Controller
             )
         ]);
     }
+/**
+ * @OA\Get(
+ *     path="/api/detail/{id}",
+ *     operationId="viewInformationDoctor",
+ *     tags={"Patient"},
+ *     summary="View information of a doctor",
+ *     description="Retrieve information of a specific doctor",
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         description="ID of the doctor",
+ *         required=true,
+ *         @OA\Schema(
+ *             type="integer",
+ *             format="int64"
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Doctor information retrieved successfully",
+ *         @OA\JsonContent(
+ *             @OA\Property(
+ *                 property="message",
+ *                 type="string",
+ *                 example="View profile doctor successfully"
+ *             ),
+ *             @OA\Property(
+ *                 property="payload",
+ *                 type="object",
+ *                 ref="#/components/schemas/ViewInformationDoctorRes"
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=404,
+ *         description="Doctor not found"
+ *     )
+ * )
+ */
 
     public function ViewInformationDoctor($id){
         $doctor = $this->doctorRepository->getDoctorById($id);
