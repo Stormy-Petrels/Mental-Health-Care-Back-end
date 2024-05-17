@@ -30,22 +30,35 @@ class PatientController extends Controller
     }
 
     /**
-     * @OA\Schema(
-     *     schema="PatientProfileUpdateRequest",
-     *     required={"name", "email"},
-     *     @OA\Property(
-     *         property="name",
-     *         type="string",
-     *         example="John Doe",
-     *         description="The name of the patient"
-     *     ),
-     *     @OA\Property(
-     *         property="email",
-     *         type="string",
-     *         format="email",
-     *         example="johndoe@example.com",
-     *         description="The email address of the patient"
-     *     )
+     * @OA\Post(
+     * path="/api/profile/{id}",
+     * operationId="Update Post",
+     * tags={"Patient"},
+     * summary="User Update Post",
+     * description="Update Post here",
+     *     @OA\RequestBody(
+     *         @OA\JsonContent(),
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *            @OA\Schema(
+     *               type="object",
+     *               required={"email", "password", "fullName", "address", "phone", "image"},
+     *               @OA\Property(property="email", type="string", example="patient@gmail.com"),
+     *               @OA\Property(property="password", type="string", example="Patient123@.")
+     *               @OA\Property(property="fullName", type="string", example="Patient1")
+     *               @OA\Property(property="address", type="string", example="DN")
+     *               @OA\Property(property="phone", type="string", example="0987654321")
+     *               @OA\Property(property="image", type="url", example="aaaaaaaaaaaaaaaaaa")
+     *         )
+     *            ),
+     *        ),
+     *    ),
+     *      @OA\Response(
+     *          response=201,
+     *          description="Post Created  Successfully",
+     *          @OA\JsonContent()
+     *       ),
+     *      @OA\Response(response=400, description="Bad request"),
      * )
      */
     public function profilePatient($id)
@@ -59,7 +72,7 @@ class PatientController extends Controller
         return response()->json([
             'message' => 'Patient data retrieved successfully',
             'data' => new ProfileRes(
-                $patient->getId(),
+                $patient->getUserId(),
                 $patient->user->getEmail(),
                 $patient->user->getPassword(),
                 $patient->user->getFullName(),
@@ -72,43 +85,6 @@ class PatientController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/profile/{id}",
-     *     operationId="updateProfilePatient",
-     *     tags={"Patient"},
-     *     summary="Update patient profile",
-     *     description="Update the profile of a specific patient",
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID of the patient",
-     *         required=true,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="application/json",
-     *             @OA\Schema(ref="#/components/schemas/PatientProfileUpdateRequest")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Profile updated successfully",
-     *         @OA\MediaType(
-     *             mediaType="application/json"
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Patient not found"
-     *     )
-     * )
-     */
 
     public function updateProfilePatient(UpdateProfileRes $req)
     {
@@ -130,7 +106,7 @@ class PatientController extends Controller
         return response()->json([
             'message' => 'Patient profile updated successfully',
             'data' => new ProfileRes(
-                $patient->getId(),
+                $patient->getUserId(),
                 $patient->user->getEmail(),
                 $patient->user->getPassword(),
                 $patient->user->getFullName(),
@@ -143,25 +119,28 @@ class PatientController extends Controller
         ]);
     }
 
-    public function ViewInformationDoctor($id){
+
+    public function ViewInformationDoctor($id)
+    {
         $doctor = $this->doctorRepository->getDoctorById($id);
         return response()->json(
             [
-            'message' => 'View profile doctor successfully',
-            'payload' => new ViewInformationDoctorRes(
-                $doctor->getUserId(),
-                $doctor->getDescription(),
-                $doctor->getMajor(),
-                $doctor->user->getEmail(),
-                $doctor->user->getPassword(),
-                $doctor->user->getFullName(),
-                $doctor->user->getAddress(),
-                $doctor->user->getPhone(),
-                $doctor->user->getUrlImage(),
-            )
+                'message' => 'View profile doctor successfully',
+                'payload' => new ViewInformationDoctorRes(
+                    $doctor->getUserId(),
+                    $doctor->getDescription(),
+                    $doctor->getMajor(),
+                    $doctor->user->getEmail(),
+                    $doctor->user->getPassword(),
+                    $doctor->user->getFullName(),
+                    $doctor->user->getAddress(),
+                    $doctor->user->getPhone(),
+                    $doctor->user->getUrlImage()
+                )
             ]
         );
     }
+
 
     public function viewListDoctors()
     {
@@ -184,8 +163,8 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'message' => 'Successfully ',
+            'message' => 'Successfully retrieved list of doctors',
             'payload' => $doctorResponses
         ]);
-}
+    }
 }
