@@ -3,10 +3,27 @@
 namespace App\Dtos\Common;
 
 use Illuminate\Http\Request;
-
+/**
+ * @OA\Schema(
+ *     schema="SignInReqCommon",
+ *     type="object",
+ *     title="SignInReq",
+ *     description="Request object for user sign-in",
+ *     required={"email", "password"}
+ * )
+ */
 class SignInReq
 {
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $email;
+
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $password;
 
     public function __construct(Request $request)

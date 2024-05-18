@@ -1,32 +1,48 @@
 <?php
+
 namespace App\Dtos\Patient;
+
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
 
 /**
  * @OA\Schema(
- *     schema="SignInRes",
- *     title="Sign In Response",
- *     description="Response schema for sign in operation",
- *     @OA\Property(
- *         property="userId",
- *         type="integer",
- *         format="int64",
- *         description="User ID"
- *     ),
- *     @OA\Property(
- *         property="role",
- *         type="string",
- *         description="User Role"
- *     )
+ *     schema="SignUpReq",
+ *     title="Sign up Request",
+ *     description="Request schema for sign up operation",
+ *     required={"email", "fullName", "password", "phone", "address"}
  * )
  */
 class SignUpReq
 {
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $email;
+
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $fullName;
+
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $password;
+
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $phone;
+
+    /**
+     * @OA\Property()
+     * @var string
+     */
     public string $address;
 
     public function __construct(Request $req)
