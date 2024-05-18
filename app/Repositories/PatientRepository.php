@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+
 
 class PatientRepository
 {
@@ -57,7 +59,7 @@ class PatientRepository
 
         return $patients;
     }
-    
+
     public function getPatientById($id)
     {
         $query = DB::select("SELECT users.id AS user_id, users.role, users.email, users.password, users.fullName, users.address, users.phone, users.urlImage, patients.id, patients.healthCondition, patients.note
@@ -77,7 +79,7 @@ class PatientRepository
     {
         $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
         $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
-  
+
         DB::update($user_sql, [
             $user->getEmail(),
             $user->getPassword(),
@@ -94,10 +96,12 @@ class PatientRepository
         ]);
 
         $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
-        $newInformationPatient = DB::selectOne("
+        $newInformationPatient = DB::selectOne(
+            "
             SELECT patients.id, patients.healthCondition, patients.note
             FROM patients
-            WHERE patients.userId = ?", [$id]
+            WHERE patients.userId = ?",
+            [$id]
         );
 
         return new Patient(
@@ -124,5 +128,55 @@ class PatientRepository
         WHERE users.role = 'doctor' AND doctors.id = '$id'");
         $result = $query[0];
         return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage));
+    }
+
+    public function createPatient($user, $patient)
+    {
+        $insertUser = "INSERT INTO users (id, role, fullName, email, password, phone, address, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        DB::insert($insertUser, [
+            $user->getId(),
+            $user->getRole()->getValue(),
+            $user->getFullname(),
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getPhone(),
+            $user->getAddress(),
+            $user->getUrlImage(),
+            $user->getStatus(),
+            Carbon::now(),
+            Carbon::now()
+        ]);
+
+        $insertPatient = "INSERT INTO patients (id, userId, healthCondition, note, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?);";
+        DB::insert($insertPatient, [
+            $user->getId(),
+            $user->getId(),
+            $patient->getHealthCondition(),
+            $patient->getNote(),
+            Carbon::now(),
+            Carbon::now()
+        ]);
+
+        $sql = "SELECT * FROM users JOIN patients ON users.id = patients.userId WHERE users.id = ?";
+        $newPatient = DB::select($sql, [$user->getId()]);
+
+        
+        return new
+            Patient(
+                $newPatient[0]->id,
+                $newPatient[0]->healthCondition,
+                $newPatient[0]->note,
+                new User(
+                    Role::Patient,
+                    $newPatient[0]->email,
+                    $newPatient[0]->password,
+                    $newPatient[0]->fullName,
+                    $newPatient[0]->address,
+                    $newPatient[0]->phone,
+                    $newPatient[0]->urlImage,
+                    $newPatient[0]->isActive
+                )
+            );
     }
 }
