@@ -60,7 +60,7 @@ class AdminDoctorController extends Controller
 
     public function createDoctor(DoctorReq $request)
     {
-        $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->phone, $request->address, $request->urlImage, $request->isActive);
+        $user = new User($request->role, $request->email, $request->password, $request->fullName,  $request->address, $request->phone, $request->urlImage, $request->isActive);
         $doctor = new Doctor($user->getId(), $request->description, $request->major);
         $result = $this->doctorRepository->createDoctor($user, $doctor);
 
