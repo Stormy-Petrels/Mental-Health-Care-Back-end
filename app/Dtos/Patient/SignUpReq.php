@@ -63,7 +63,7 @@ class SignUpReq
                 'errors' => $validator->errors()
             ], 422)->throwResponse();
         }
-        
+
         $this->email = $req->input("email");
         $this->fullName = $req->input("fullName");
         $this->password = $req->input("password");
@@ -76,7 +76,7 @@ class SignUpReq
         return [
             'email' => 'required|email',
             'fullName' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
             'phone' => 'required',
             'address' => 'required',
         ];

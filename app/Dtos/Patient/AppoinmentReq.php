@@ -3,7 +3,7 @@
 namespace App\Dtos\Patient;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
 /**
  * @OA\Schema(
  *     schema="AppoinmentReq",
@@ -50,9 +50,33 @@ class AppoinmentReq
 
     public function __construct(Request $req)
     {
+        $data = [
+            'date' => $req->input("date"),
+            'patientId' => $req->input("patientId"),
+            'doctorId' => $req->input("doctorId"),
+            'calendarId' => $req->input("calendarId"),
+
+        ];
+    
+        $validator = Validator::make($data, $this->rules());
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400)->throwResponse();
+        }
         $this->date = $req->input("date");
         $this->patientId = $req->input("patientId");
         $this->doctorId = $req->input("doctorId");
         $this->CalendarId = $req->input("calendarId");
+    }
+    public function rules(): array
+    {
+        return [
+            'date' => 'required',
+            'patientId' => 'required',
+            'doctorId' => 'required',
+            'calendarId' => 'required',
+        ];
     }
 }

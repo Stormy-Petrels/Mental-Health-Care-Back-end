@@ -3,6 +3,8 @@
 namespace App\Dtos\Patient;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
 
 /**
  * @OA\Schema(
@@ -34,7 +36,26 @@ class CheckTimeReq
 
     public function __construct(Request $req)
     {
+        $data = [
+            'date' => $req->input("date"),
+            'doctorId' => $req->input("doctorId"),
+        ];
+    
+        $validator = Validator::make($data, $this->rules());
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400)->throwResponse();
+        }
         $this->date = $req->input("date");
         $this->doctorId = $req->input("doctorId");
+    }
+    public function rules(): array
+    {
+        return [
+            'date' => 'required',
+            'doctorId' => 'required',
+        ];
     }
 }

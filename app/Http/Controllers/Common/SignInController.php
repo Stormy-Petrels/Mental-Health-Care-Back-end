@@ -72,6 +72,6 @@ class SignInController extends Controller
                 $user->getAddress(),
                 $user->getUrlImage()
             )
-        ]);
+        ],200);
     }
 }
