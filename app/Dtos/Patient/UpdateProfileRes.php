@@ -26,18 +26,4 @@ class UpdateProfileRes
         $this->healthCondition = $req->healthCondition ?? '';
         $this->note = $req->note ?? '';
     }
-    public function rules(): array
-    {
-        return [
-            'id' => 'required',
-            'email' => 'required|email',
-            'password' => 'nullable|string|min:6',
-            'fullName' => 'required|string',
-            'address' => 'required|string',
-            'phone' => 'required|string',
-            'image' => 'nullable|url',
-            'healthCondition' => 'nullable|string',
-            'note' =>'nullable|string'
-        ];
-    }
 }

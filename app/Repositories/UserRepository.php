@@ -21,8 +21,8 @@ class UserRepository
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getAddress(),
             $user->getPhone(),
+            $user->getAddress(),
             Carbon::now(),
             Carbon::now()
         ]);
