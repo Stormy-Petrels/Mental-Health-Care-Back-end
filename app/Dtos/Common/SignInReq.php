@@ -48,7 +48,7 @@ class SignInReq
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ];
     }

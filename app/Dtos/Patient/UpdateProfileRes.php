@@ -10,7 +10,7 @@ class UpdateProfileRes
     public string $fullName;
     public string $address;
     public string $phone;
-    public string $image;
+    public ?string $image;
     public ?string $healthCondition;
     public ?string $note;
 

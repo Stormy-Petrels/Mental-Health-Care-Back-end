@@ -62,7 +62,8 @@ class UserRepository
                 $newUser->fullName,
                 $newUser->address == null ? "" : $newUser->address,
                 $newUser->phone == null ? "" : $newUser->phone,
-                $newUser->urlImage == null ? "" : $newUser->urlImage
+                $newUser->urlImage == null ? "" : $newUser->urlImage,
+                $newUser->isActive == null ? "" : $newUser->isActive
             );
         }
         return null;
