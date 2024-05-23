@@ -57,7 +57,7 @@ class DoctorReq extends BaseModel
         return [
             'email' => 'required|email|unique:users,email',
             'fullName' => 'required',
-            'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+            'password' => 'required|min:8',
             'phone' => 'required',
             'address' => 'required',
             'description' => 'required',

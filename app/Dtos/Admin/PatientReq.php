@@ -25,7 +25,7 @@ class PatientReq extends BaseModel
     public function __construct(Request $req)
     {
         $data = [
-            'email' => 'required|email|unique:users,email',
+            'email' => $req->input("email"),
             'password' => $req->input("password"),
             'fullName' => $req->input("fullName"),
             'phone' => $req->input("phone"),
@@ -59,8 +59,8 @@ class PatientReq extends BaseModel
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
             'fullName' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string'],
             'address' => ['required', 'string', 'max:255'],

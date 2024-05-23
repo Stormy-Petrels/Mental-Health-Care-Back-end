@@ -53,8 +53,8 @@ class UpdateProfileReq
     {
         return [
             'id' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
             'fullName' => 'required',
             'address' => 'required',
             'phone' => 'required',
