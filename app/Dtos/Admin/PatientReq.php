@@ -25,7 +25,7 @@ class PatientReq extends BaseModel
     public function __construct(Request $req)
     {
         $data = [
-            'email' => $req->input("email"),
+            'email' => 'required|email|unique:users,email',
             'password' => $req->input("password"),
             'fullName' => $req->input("fullName"),
             'phone' => $req->input("phone"),
