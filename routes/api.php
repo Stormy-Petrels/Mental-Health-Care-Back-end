@@ -65,4 +65,5 @@ Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
 Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
+
 Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);

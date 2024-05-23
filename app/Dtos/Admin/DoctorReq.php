@@ -26,8 +26,8 @@ class DoctorReq extends BaseModel
             'fullName' => $req->input("fullName"),
             'phone' => $req->input("phone"),
             'address' => $req->input("address"),
-            'healthCondition' => $req->input("healthCondition"),
-            'note' => $req->input("note"),
+            'description' => $req->input("description"),
+            'major' => $req->input("major"),
             'urlImage' => $req->input("urlImage"),
             'isActive' => $req->input("isActive")
 
@@ -55,7 +55,7 @@ class DoctorReq extends BaseModel
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|unique:users,email',
             'fullName' => 'required',
             'password' => 'required|min:8',
             'phone' => 'required',
