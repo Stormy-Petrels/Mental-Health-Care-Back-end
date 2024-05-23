@@ -59,8 +59,8 @@ class PatientReq extends BaseModel
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'],
-            'password' => 'required|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
             'fullName' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string'],
             'address' => ['required', 'string', 'max:255'],
