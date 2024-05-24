@@ -57,8 +57,9 @@ class DoctorController extends Controller
         
         return response()->json(
             [
+            'status'=>200,
             'message' => 'View profile doctor successfully',
-            'payload' => new ProfileRes(
+            'doctor' => new ProfileRes(
                 $doctor->getUserId(),
                 $doctor->user->getEmail(),
                 $doctor->user->getPassword(),

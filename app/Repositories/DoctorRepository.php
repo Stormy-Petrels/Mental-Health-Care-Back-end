@@ -171,9 +171,10 @@ class DoctorRepository
         return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User(Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->address, $newUserResult[0]->phone, $newUserResult[0]->urlImage, $newUserResult[0]->isActive));
     }
 
-    public function getAllMajors(){
+    public function getAllMajors()
+    {
         $majors = collect(DB::select("SELECT * FROM majors"));
-        $mappedMajors = $majors->map(function($major) {
+        $mappedMajors = $majors->map(function ($major) {
             return [
                 'id' => $major->id,
                 'name' => $major->name,
