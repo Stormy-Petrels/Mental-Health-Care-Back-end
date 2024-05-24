@@ -55,7 +55,7 @@ class DoctorReq extends BaseModel
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|unique:users,email',
             'fullName' => 'required',
             'password' => 'required|min:8',
             'phone' => 'required',
