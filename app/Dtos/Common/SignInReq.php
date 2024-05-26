@@ -48,8 +48,8 @@ class SignInReq
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ];
     }
 }
