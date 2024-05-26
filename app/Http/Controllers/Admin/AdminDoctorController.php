@@ -75,8 +75,10 @@ class AdminDoctorController extends Controller
         );
     
         if ($request->hasFile('urlImage')) {
-            $imagePath = $request->file('urlImage')->store('public/images');
-            $user->setUrlImage($imagePath);
+            $file = $request->file('urlImage');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images'), $fileName);
+            $user->setUrlImage($fileName);  // Lưu tên file vào DB
         }
     
         $doctor = new Doctor(
@@ -96,7 +98,7 @@ class AdminDoctorController extends Controller
             $user->getAddress(),
             $user->getPhone(),
             $user->getUrlImage(),
-            $user->getStatus()
+            "1"
         );
     
         return response()->json([

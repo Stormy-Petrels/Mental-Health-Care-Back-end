@@ -110,6 +110,6 @@ class User extends BaseModel
 
     public function getStatus(): string
     {
-        return $this->isActive;
+        return $this->isActive == null ? "" : $this->isActive;
     }
 }
