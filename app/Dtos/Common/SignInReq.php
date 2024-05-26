@@ -3,6 +3,7 @@
 namespace App\Dtos\Common;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 /**
  * @OA\Schema(
  *     schema="SignInReqCommon",
@@ -28,6 +29,18 @@ class SignInReq
 
     public function __construct(Request $request)
     {
+        $data = [
+            'email' => $request->input("email"),
+            'password' => $request->input("password"),
+        ];
+    
+        $validator = Validator::make($data, $this->rules());
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422)->throwResponse();
+        }
         $this->email = $request->input("email");
         $this->password = $request->input("password");
     }
@@ -36,7 +49,7 @@ class SignInReq
     {
         return [
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
         ];
     }
 }

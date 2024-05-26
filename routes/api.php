@@ -49,8 +49,8 @@ Route::prefix('admin')->group(function () {
         Route::post('/status/block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
     });
 });
-Route::post("/sign-up",  [SignUpController::class, 'signUp']);
-Route::post("/sign-in",  [SignInController::class, 'signIn']);
+Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
+Route::post("/sign-in",  [SignInController::class, 'signIn']); 
 
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
@@ -66,7 +66,6 @@ Route::get('/major', [DoctorController::class, 'getAllMajors']);
 
 Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
-
 
 
 

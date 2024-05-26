@@ -21,8 +21,8 @@ class UserRepository
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getAddress(),
             $user->getPhone(),
+            $user->getAddress(),
             Carbon::now(),
             Carbon::now()
         ]);
@@ -62,7 +62,8 @@ class UserRepository
                 $newUser->fullName,
                 $newUser->address == null ? "" : $newUser->address,
                 $newUser->phone == null ? "" : $newUser->phone,
-                $newUser->urlImage == null ? "" : $newUser->urlImage
+                $newUser->urlImage == null ? "" : $newUser->urlImage,
+                $newUser->isActive == null ? "" : $newUser->isActive
             );
         }
         return null;
@@ -71,8 +72,8 @@ class UserRepository
     public function updateStatusUsersActive($userId)
     {
         $user = DB::update("UPDATE users SET users.isActive = '1' WHERE users.id = $userId;");
-
-        if ($user > 0) {
+ dd($user);
+        // if ($user > 0) {
             $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
             $transferResult = $result[0];
 
@@ -85,8 +86,8 @@ class UserRepository
                 $transferResult->address == null ? "" : $transferResult->address,
                 $transferResult->urlImage == null ? "" : $transferResult->urlImage
             );
-        }
-        return null;
+        // }
+        //   return null;
     }
 
     public function updateStatusUsersInactive($userId)

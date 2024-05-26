@@ -124,7 +124,7 @@ class PatientController extends Controller
             $req->fullName,
             $req->address,
             $req->phone,
-            $req->image
+            $req->image 
         );
         $patient = new Patient(
             $req->id,

@@ -4,6 +4,7 @@ namespace App\Dtos\Patient;
 
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * @OA\Schema(
@@ -47,6 +48,22 @@ class SignUpReq
 
     public function __construct(Request $req)
     {
+        $data = [
+            'email' => $req->input("email"),
+            'fullName' => $req->input("fullName"),
+            'password' => $req->input("password"),
+            'phone' => $req->input("phone"),
+            'address' => $req->input("address"),
+        ];
+    
+        $validator = Validator::make($data, $this->rules());
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422)->throwResponse();
+        }
+
         $this->email = $req->input("email");
         $this->fullName = $req->input("fullName");
         $this->password = $req->input("password");
@@ -57,9 +74,9 @@ class SignUpReq
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email',
             'fullName' => 'required',
-            'password' => 'required|min:6',
+            'password' => 'required|min:8',
             'phone' => 'required',
             'address' => 'required',
         ];

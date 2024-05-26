@@ -7,6 +7,7 @@ use App\Repositories\DoctorRepository;
 use App\Dtos\Doctor\ProfileReq;
 use App\Dtos\Doctor\ProfileRes;
 use App\Dtos\Doctor\UpdateProfileReq;
+use App\Dtos\Doctor\MajorReq;
 use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Role;
@@ -56,8 +57,9 @@ class DoctorController extends Controller
         
         return response()->json(
             [
+            'status'=>200,
             'message' => 'View profile doctor successfully',
-            'payload' => new ProfileRes(
+            'doctor' => new ProfileRes(
                 $doctor->getUserId(),
                 $doctor->user->getEmail(),
                 $doctor->user->getPassword(),
@@ -133,6 +135,14 @@ class DoctorController extends Controller
                 $doctor->getDescription(),
                 $doctor->getMajor(),
             )
+        ]);
+    }
+
+    public function getAllMajors(){
+        $majors = $this->doctorRepository->getAllMajors();
+        return response()->json([
+            'message' => 'Majors',
+            'data' => $majors
         ]);
     }
 

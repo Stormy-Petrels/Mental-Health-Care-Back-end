@@ -58,6 +58,11 @@ class SignInController extends Controller
                 'message' => 'User not found or invalid credentials',
             ], 401);
         }
+        if($user->getStatus() == 0){
+            return response()->json([
+                'message' => 'account has been locked',
+            ], 401);
+        }
         $patient = $this->patientRepository->findByEmail($req->email);
         return response()->json([
             'message' => 'Sign in Successfully',
@@ -72,6 +77,6 @@ class SignInController extends Controller
                 $user->getAddress(),
                 $user->getUrlImage()
             )
-        ]);
+        ],200);
     }
 }
