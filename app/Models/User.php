@@ -106,6 +106,7 @@ class User extends BaseModel
     {
         $this->email = $email;
     }
+    
 
     public function getStatus(): string
     {
