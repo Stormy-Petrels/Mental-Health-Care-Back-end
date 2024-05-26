@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Admin\AdminController;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -34,7 +33,7 @@ Route::prefix('admin')->group(function () {
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);
-
+      
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     Route::prefix('doctors')->group(function () {
@@ -43,14 +42,9 @@ Route::prefix('admin')->group(function () {
         // Route::put('{user_id}/update', [AdminPatientController::class, 'update'])->name('update.patient');
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
-
-    Route::prefix('users')->group(function () {
-        Route::post('/status/active/{id}', [AdminController::class, 'updateStatusUsersActive']);
-        Route::post('/status/block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
-    });
 });
-Route::post("/sign-up",  [SignUpController::class, 'signUp']);
-Route::post("/sign-in",  [SignInController::class, 'signIn']);
+Route::post("/sign-up",  [SignUpController::class, 'signUp']); 
+Route::post("/sign-in",  [SignInController::class, 'signIn']); 
 
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
@@ -68,6 +62,7 @@ Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 
-
+Route::post('/Admin/Update/Status/Active/{id}', [AdminController::class, 'updateStatusUsersActive']);
+Route::post('/Admin/Update/Status/Block/{id}', [AdminController::class, 'updateStatusUsersInactive']);
 
 Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
