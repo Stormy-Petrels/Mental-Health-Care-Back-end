@@ -68,7 +68,6 @@ class SignInController extends Controller
             'message' => 'Sign in Successfully',
             'payload' => new SignInRes(
                 $patient->getUserId(),
-                $user->getId(),
                 $user->getRole()->getValue(),
                 $user->getEmail(),
                 $user->getFullName(),

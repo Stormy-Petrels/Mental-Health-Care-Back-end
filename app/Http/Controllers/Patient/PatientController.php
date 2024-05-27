@@ -68,6 +68,7 @@ class PatientController extends Controller
         }
 
         return response()->json([
+            'status' =>200,
             'message' => 'Patient data retrieved successfully',
             'data' => new ProfileRes(
                 $patient->getUserId(),
@@ -132,6 +133,7 @@ class PatientController extends Controller
         );
         $patient = $this->patientRepository->updatePatient($user, $patient, $req->id);
         return response()->json([
+            'status'=> 200,
             'message' => 'Patient profile updated successfully',
             'data' => new ProfileRes(
                 $patient->getUserId(),
