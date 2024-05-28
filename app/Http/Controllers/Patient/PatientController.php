@@ -218,12 +218,12 @@ class PatientController extends Controller
                 $doctor->getDescription(),
                 $doctor->getMajor(),
                 $doctor->user->getEmail(),
-                $doctor->user->getFullName(),
                 $doctor->user->getPassword(),
                 $doctor->user->getFullName(),
                 $doctor->user->getAddress(),
                 $doctor->user->getPhone(),
-                $doctor->user->getUrlImage()
+                $doctor->user->getUrlImage(),
+                $doctor->user->getStatus()
             );
         }
 
