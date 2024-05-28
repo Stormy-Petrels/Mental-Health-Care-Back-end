@@ -151,7 +151,7 @@ class DoctorRepository
             $user->getPhone(),
             $user->getAddress(),
             $user->getUrlImage(),
-            $user->getStatus(),
+            "1",
             Carbon::now(),
             Carbon::now()
         ]);

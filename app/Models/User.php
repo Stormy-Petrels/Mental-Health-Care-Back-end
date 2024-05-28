@@ -106,9 +106,10 @@ class User extends BaseModel
     {
         $this->email = $email;
     }
+    
 
     public function getStatus(): string
     {
-        return $this->isActive;
+        return $this->isActive == null ? "" : $this->isActive;
     }
 }

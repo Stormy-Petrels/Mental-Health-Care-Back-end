@@ -62,7 +62,7 @@ class DoctorReq extends BaseModel
             'address' => 'required',
             'description' => 'required',
             'major' => 'required',
-            'urlImage' => 'required',
+            'urlImage' => 'nullable',
             'isActive' => 'required'
         ];
     }
