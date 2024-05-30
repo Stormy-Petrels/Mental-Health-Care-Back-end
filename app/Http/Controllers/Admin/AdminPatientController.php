@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Dtos\Admin\PatientRes;
 use App\Dtos\Admin\PatientReq;
+use App\Dtos\Doctor\ProfileRes;
+use App\Dtos\Patient\UpdateProfileRes;
 
 class AdminPatientController extends Controller
 {
@@ -149,6 +151,40 @@ class AdminPatientController extends Controller
             'status' => 200,
             'message' => 'Add new patient successfully',
             'data' => $result
+        ]);
+    }
+
+    public function updateProfilePatient(UpdateProfileRes $req)
+    {
+        $user = new User(
+            Role::Patient,
+            $req->email,
+            $req->password,
+            $req->fullName,
+            $req->address,
+            $req->phone,
+            $req->image
+        );
+        $patient = new Patient(
+            $req->id,
+            $req->healthCondition,
+            $req->note
+        );
+        $patient = $this->patientRepository->updatePatient($user, $patient, $req->id);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Patient profile updated successfully',
+            'data' => new ProfileRes(
+                $patient->getUserId(),
+                $patient->user->getEmail(),
+                $patient->user->getPassword(),
+                $patient->user->getFullName(),
+                $patient->user->getAddress(),
+                $patient->user->getPhone(),
+                $patient->user->getUrlImage(),
+                $patient->getHealthCondition(),
+                $patient->getNote()
+            )
         ]);
     }
 }

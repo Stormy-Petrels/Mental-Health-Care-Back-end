@@ -18,6 +18,8 @@ use App\Dtos\Patient\UpdateProfileRes;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
 use App\Dtos\Patient\UserRes;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -69,7 +71,7 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'status' =>200,
+            'status' => 200,
             'message' => 'Patient data retrieved successfully',
             'data' => new ProfileRes(
                 $patient->getUserId(),
@@ -116,80 +118,62 @@ class PatientController extends Controller
      *     @OA\Response(response=400, description="Invalid input")
      * )
      */
-    public function updateProfilePatient(UpdateProfileRes $req)
-    {
-        $user = new User(
-            Role::Patient,
-            $req->email,
-            $req->password,
-            $req->fullName,
-            $req->address,
-            $req->phone,
-            $req->image 
-        );
-        $patient = new Patient(
-            $req->id,
-            $req->healthCondition,
-            $req->note
-        );
-        $patient = $this->patientRepository->updatePatient($user, $patient, $req->id);
-        return response()->json([
-            'status'=> 200,
-            'message' => 'Patient profile updated successfully',
-            'data' => new ProfileRes(
-                $patient->getUserId(),
-                $patient->user->getEmail(),
-                $patient->user->getPassword(),
-                $patient->user->getFullName(),
-                $patient->user->getAddress(),
-                $patient->user->getPhone(),
-                $patient->user->getUrlImage(),
-                $patient->getHealthCondition(),
-                $patient->getNote()
-            )
-        ]);
-    }
-
-
-
-
-
-
-
-
-    public function updateP(UserRes $req, $id)
-    {
-        $user = new User(
-            Role::Patient,
-            $req->email,
-            $req->password,
-            $req->fullName,
-            $req->address,
-            $req->phone,
-            $req->image 
-        );
-        $patient = $this->patientRepository->updateInfo($user, $req->id);
-        return response()->json([
-            'status'=> 200,
-            'message' => 'Patient profile updated successfully by method PUT',
-            'data' => new UserRes(
-                $patient->getId(),
-                $patient->getEmail(),
-                $patient->getPassword(),
-                $patient->getFullName(),
-                $patient->getAddress(),
-                $patient->getPhone(),
-                $patient->getUrlImage()
-            )
-        ]);
-    }
-
-
-
-
-
-
     
+
+
+    public function updatePatient(Request $request, $id)
+    {
+        $userRes = new UpdateProfileRes($request);
+
+        $urlImage = null;
+        if ($request->hasFile('urlImage')) {
+            $file = $request->file('urlImage');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images'), $fileName);
+            $urlImage = $fileName;
+        }
+
+        $user = new User(
+            Role::Patient,
+            $userRes->email,
+            $userRes->password,
+            $userRes->fullName,
+            $userRes->address,
+            $userRes->phone,
+            $urlImage
+        );
+
+        $patient = new Patient(
+            $userRes->id,
+            $userRes->healthCondition,
+            $userRes->note
+        );
+
+        $updatedPatient = $this->patientRepository->updatePatient($user, $patient, $userRes->id);
+
+        return response()->json([
+            'status' => 200,
+            'message' => 'Patient profile updated successfully by method PUT',
+            'data' => new ProfileRes(
+                $updatedPatient->getId(),
+                $updatedPatient->user->getEmail(),
+                $updatedPatient->user->getPassword(),
+                $updatedPatient->user->getFullName(),
+                $updatedPatient->user->getAddress(),
+                $updatedPatient->user->getPhone(),
+                $updatedPatient->user->getUrlImage(),
+                $updatedPatient->getHealthCondition(),
+                $updatedPatient->getNote()
+            )
+        ]);
+    }
+
+
+
+
+
+
+
     /**
      * @OA\Get(
      *     path="/api/detail/{id}",

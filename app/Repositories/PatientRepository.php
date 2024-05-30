@@ -121,30 +121,7 @@ class PatientRepository
     }
 
 
-    public function updateInfo(User $user, string $id)
-    {
-        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
-        DB::update($user_sql, [
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getFullName(),
-            $user->getAddress(),
-            $user->getPhone(),
-            $user->getUrlImage(),
-            $id
-        ]);
-        $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
-        return
-            new User(
-                Role::Patient,
-                $newInformationUser->email,
-                $newInformationUser->password,
-                $newInformationUser->fullName,
-                $newInformationUser->address,
-                $newInformationUser->phone,
-                $newInformationUser->urlImage
-            );
-    }
+    
 
 
 

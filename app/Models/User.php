@@ -112,4 +112,8 @@ class User extends BaseModel
     {
         return $this->isActive == null ? "" : $this->isActive;
     }
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
 }

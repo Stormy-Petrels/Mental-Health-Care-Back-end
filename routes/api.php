@@ -34,14 +34,12 @@ Route::prefix('admin')->group(function () {
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);
-        Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
+        Route::post('/profile/{id}', [AdminPatientController::class, 'updateProfilePatient']);
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     Route::prefix('doctors')->group(function () {
         Route::get('/', [AdminDoctorController::class, 'getAllDoctors']);
         Route::post('/create', [AdminDoctorController::class, 'createDoctor']);
-        // Route::put('{user_id}/update', [AdminPatientController::class, 'update'])->name('update.patient');
-        // Route::get('/search', [AdminPatientController::class, 'search']);
     });
 
     Route::prefix('users')->group(function () {
@@ -55,7 +53,8 @@ Route::post("/sign-in",  [SignInController::class, 'signIn']);
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
 Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
-Route::post('/profile/{id}/edit', [PatientController::class, 'updateP']);
+
+Route::post('/profile/{id}/edit', [PatientController::class, 'updatePatient']);
 
 
 
