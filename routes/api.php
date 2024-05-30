@@ -69,4 +69,4 @@ Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 
 
-Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
+Route::get('/patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
