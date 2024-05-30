@@ -119,6 +119,35 @@ class PatientRepository
             )
         );
     }
+
+
+    public function updateInfo(User $user, string $id)
+    {
+        $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
+        DB::update($user_sql, [
+            $user->getEmail(),
+            $user->getPassword(),
+            $user->getFullName(),
+            $user->getAddress(),
+            $user->getPhone(),
+            $user->getUrlImage(),
+            $id
+        ]);
+        $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
+        return
+            new User(
+                Role::Patient,
+                $newInformationUser->email,
+                $newInformationUser->password,
+                $newInformationUser->fullName,
+                $newInformationUser->address,
+                $newInformationUser->phone,
+                $newInformationUser->urlImage
+            );
+    }
+
+
+
     public function getDoctorById(string $id)
     {
         $query = DB::select("SELECT users.id AS userId, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
@@ -161,7 +190,7 @@ class PatientRepository
         $sql = "SELECT * FROM users JOIN patients ON users.id = patients.userId WHERE users.id = ?";
         $newPatient = DB::select($sql, [$user->getId()]);
 
-        
+
         return new
             Patient(
                 $newPatient[0]->id,

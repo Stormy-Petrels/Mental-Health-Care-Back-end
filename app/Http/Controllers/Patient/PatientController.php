@@ -17,6 +17,7 @@ use App\Dtos\Patient\ProfileRes;
 use App\Dtos\Patient\UpdateProfileRes;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
+use App\Dtos\Patient\UserRes;
 
 /**
  * @OA\Tag(
@@ -148,6 +149,47 @@ class PatientController extends Controller
             )
         ]);
     }
+
+
+
+
+
+
+
+
+    public function updateP(UserRes $req, $id)
+    {
+        $user = new User(
+            Role::Patient,
+            $req->email,
+            $req->password,
+            $req->fullName,
+            $req->address,
+            $req->phone,
+            $req->image 
+        );
+        $patient = $this->patientRepository->updateInfo($user, $req->id);
+        return response()->json([
+            'status'=> 200,
+            'message' => 'Patient profile updated successfully by method PUT',
+            'data' => new UserRes(
+                $patient->getId(),
+                $patient->getEmail(),
+                $patient->getPassword(),
+                $patient->getFullName(),
+                $patient->getAddress(),
+                $patient->getPhone(),
+                $patient->getUrlImage()
+            )
+        ]);
+    }
+
+
+
+
+
+
+    
     /**
      * @OA\Get(
      *     path="/api/detail/{id}",
@@ -198,8 +240,8 @@ class PatientController extends Controller
                     $doctor->getDescription(),
                     $doctor->getMajor(),
                     $doctor->user->getEmail(),
-                    $doctor->user->getPassword(),
                     $doctor->user->getFullName(),
+                    $doctor->user->getPassword(),
                     $doctor->user->getAddress(),
                     $doctor->user->getPhone(),
                     $doctor->user->getUrlImage()

@@ -34,7 +34,7 @@ Route::prefix('admin')->group(function () {
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);
-
+        Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     Route::prefix('doctors')->group(function () {
@@ -55,7 +55,10 @@ Route::post("/sign-in",  [SignInController::class, 'signIn']);
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
 Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
-Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
+Route::post('/profile/{id}/edit', [PatientController::class, 'updateP']);
+
+
+
 
 Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
