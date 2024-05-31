@@ -119,6 +119,12 @@ class PatientRepository
             )
         );
     }
+
+
+    
+
+
+
     public function getDoctorById(string $id)
     {
         $query = DB::select("SELECT users.id AS userId, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
@@ -161,7 +167,7 @@ class PatientRepository
         $sql = "SELECT * FROM users JOIN patients ON users.id = patients.userId WHERE users.id = ?";
         $newPatient = DB::select($sql, [$user->getId()]);
 
-        
+
         return new
             Patient(
                 $newPatient[0]->id,

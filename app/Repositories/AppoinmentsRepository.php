@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Models\Appoinment;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
+use App\Dtos\Admin\AppointmentRes;
+use App\Dtos\Admin\ChartRes;
 
 class AppoinmentsRepository
 {
@@ -38,11 +40,57 @@ class AppoinmentsRepository
         }
     }
 
-    public function selectAll()
+    public function selectAllAppointment()
     {
-        $bookings = "SELECT * FROM $this->tableName";
+        $appointments = DB::table('appoinments as a')
+        ->join('patients as p', 'a.patientId', '=', 'p.id')
+        ->join('users as u1', 'p.userId', '=', 'u1.id')
+        ->join('doctors as d', 'a.doctorId', '=', 'd.id')
+        ->join('users as u2', 'd.userId', '=', 'u2.id')
+        ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
+        ->select(
+            'a.id as appointmentId',
+            'a.dateBooking as date',
+            'u1.fullName as patientName',
+            'u2.fullName as doctorName',
+            'lt.timeStart as timeStart',
+            'lt.timeEnd as timeEnd'
+        )->get();
 
-        return $bookings;
+        $collection = collect($appointments);
+        $objectAppointments = $collection->map(function ($appoinment) {
+            return new AppointmentRes(
+                $appoinment->appointmentId,
+                $appoinment->patientName,
+                $appoinment->doctorName,
+                $appoinment->date,
+                $appoinment->timeStart,
+                $appoinment->timeEnd
+            );
+        });
+        return $objectAppointments;
+    }
+
+    public function totalAppointmentDoctor($appoinments){
+        $doctorCounts = collect($appoinments)
+        ->groupBy('doctorName')
+        ->map(function ($appointments, $doctorName) {
+            return [
+                'doctorName' => $doctorName,
+                'totalCount' => $appointments->count()
+            ];
+        })
+        ->values()
+        ->toArray();
+        $doctorCollect = collect($doctorCounts);
+        $result = $doctorCollect->map(function ($item) {
+            return new ChartRes(
+                $item['doctorName'],
+                $item['totalCount']
+            );
+        });
+
+    return $result;
     }
 
     public function get_patient_id($email)

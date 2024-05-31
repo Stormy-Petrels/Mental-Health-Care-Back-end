@@ -55,7 +55,6 @@ class AppoinmentReq
             'patientId' => $req->input("patientId"),
             'doctorId' => $req->input("doctorId"),
             'calendarId' => $req->input("calendarId"),
-
         ];
     
         $validator = Validator::make($data, $this->rules());
