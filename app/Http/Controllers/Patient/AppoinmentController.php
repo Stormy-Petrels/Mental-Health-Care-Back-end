@@ -47,6 +47,7 @@ class AppoinmentController extends Controller
     {
         $listTime = $this->doctorRepository->getAvailableTimesForBooking($req->date, $req->doctorId);
         $collection = collect($listTime);
+        // dd($collection);
         $Times = $collection->map(function ($time) {
             return new TimeRes(
                 $time->id,
@@ -98,6 +99,22 @@ class AppoinmentController extends Controller
         $this->appoinmentRepository->insert($newBooking);
         return response()->json([
             'message' => 'You have successfully booked your appointment',
+        ], 200);
+    }
+    public function getAppointments(){
+        $appointments = $this->appoinmentRepository->selectAllAppointment();
+        return response()->json([
+            'message' => 'list appointment',
+            'appointments' => $appointments
+        ], 200);
+    }
+
+    public function getTotalAppointment(){
+        $appointments = $this->appoinmentRepository->selectAllAppointment();
+        $total = $this->appoinmentRepository->totalAppointmentDoctor($appointments);
+        return response()->json([
+            'message' => 'list totleAppointment',
+            'totalApointments' => $total
         ], 200);
     }
 }

@@ -64,6 +64,8 @@ Route::get('/major', [DoctorController::class, 'getAllMajors']);
 // Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
 
 Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
+Route::get('/appoinment', [AppoinmentController::class, 'getAppointments']);
+Route::get('/getTotalApointment', [AppoinmentController::class, 'getTotalAppointment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 
