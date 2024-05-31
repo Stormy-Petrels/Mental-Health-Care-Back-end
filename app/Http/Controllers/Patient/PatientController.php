@@ -198,8 +198,8 @@ class PatientController extends Controller
                     $doctor->getDescription(),
                     $doctor->getMajor(),
                     $doctor->user->getEmail(),
-                    $doctor->user->getPassword(),
                     $doctor->user->getFullName(),
+                    $doctor->user->getPassword(),
                     $doctor->user->getAddress(),
                     $doctor->user->getPhone(),
                     $doctor->user->getUrlImage()
