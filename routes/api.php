@@ -56,9 +56,6 @@ Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
 
 Route::post('/profile/{id}/edit', [PatientController::class, 'updatePatient']);
 
-
-
-
 Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
 Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
