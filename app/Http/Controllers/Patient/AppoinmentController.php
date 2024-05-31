@@ -47,6 +47,7 @@ class AppoinmentController extends Controller
     {
         $listTime = $this->doctorRepository->getAvailableTimesForBooking($req->date, $req->doctorId);
         $collection = collect($listTime);
+        // dd($collection);
         $Times = $collection->map(function ($time) {
             return new TimeRes(
                 $time->id,

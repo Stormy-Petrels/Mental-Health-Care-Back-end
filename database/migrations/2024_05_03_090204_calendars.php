@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('month', 200)->notNull();
             $table->string('year', 200)->notNull();
             $table->foreign('doctorId')->references('id')->on('doctors');
+            $table->foreign('timeId')->references('id')->on('listTimeDoctors');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('calendars');
     }
 };
