@@ -63,8 +63,6 @@ Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoc
 
 Route::get('/major', [DoctorController::class, 'getAllMajors']);
 
-
-
 Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
 Route::get('/appoinment', [AppoinmentController::class, 'getAppointments']);
 Route::get('/getTotalApointment', [AppoinmentController::class, 'getTotalAppointment']);
