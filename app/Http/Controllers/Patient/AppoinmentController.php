@@ -101,4 +101,20 @@ class AppoinmentController extends Controller
             'message' => 'You have successfully booked your appointment',
         ], 200);
     }
+    public function getAppointments(){
+        $appointments = $this->appoinmentRepository->selectAllAppointment();
+        return response()->json([
+            'message' => 'list appointment',
+            'appointments' => $appointments
+        ], 200);
+    }
+
+    public function getTotalAppointment(){
+        $appointments = $this->appoinmentRepository->selectAllAppointment();
+        $total = $this->appoinmentRepository->totalAppointmentDoctor($appointments);
+        return response()->json([
+            'message' => 'list totleAppointment',
+            'totalApointments' => $total
+        ], 200);
+    }
 }
