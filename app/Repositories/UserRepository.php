@@ -14,15 +14,17 @@ class UserRepository
 
     public function insert(User $user)
     {
-        $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
             $user->getRole()->getValue(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getPhone(),
             $user->getAddress(),
+            $user->getPhone(),
+            $user->getUrlImage(),
+            $user->getStatus(),
             Carbon::now(),
             Carbon::now()
         ]);
@@ -63,7 +65,7 @@ class UserRepository
                 $newUser->address == null ? "" : $newUser->address,
                 $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->urlImage == null ? "" : $newUser->urlImage,
-                $newUser->isActive == null ? "" : $newUser->isActive
+                $newUser->isActive
             );
         }
         return null;
