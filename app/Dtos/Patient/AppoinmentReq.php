@@ -48,6 +48,14 @@ class AppoinmentReq
      */
     public string $CalendarId;
 
+    /**
+     * @OA\Property(
+     *     description="status of the appointment",
+     *     type="boolean"
+     * )
+     */
+    public string $status;
+
     public function __construct(Request $req)
     {
         $data = [
@@ -55,6 +63,7 @@ class AppoinmentReq
             'patientId' => $req->input("patientId"),
             'doctorId' => $req->input("doctorId"),
             'calendarId' => $req->input("calendarId"),
+            'status' => $req->input("status"),
         ];
     
         $validator = Validator::make($data, $this->rules());
@@ -68,6 +77,7 @@ class AppoinmentReq
         $this->patientId = $req->input("patientId");
         $this->doctorId = $req->input("doctorId");
         $this->CalendarId = $req->input("calendarId");
+        $this->status = $req->input("status");
     }
     public function rules(): array
     {
@@ -76,6 +86,7 @@ class AppoinmentReq
             'patientId' => 'required',
             'doctorId' => 'required',
             'calendarId' => 'required',
+            'status' => 'required',
         ];
     }
 }
