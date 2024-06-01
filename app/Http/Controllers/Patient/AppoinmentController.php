@@ -95,7 +95,7 @@ class AppoinmentController extends Controller
                 'message' => 'Appointment failed',
             ], 404);
         }
-        $newBooking = new Appoinment($req->patientId, $req->doctorId, $req->date, $req->CalendarId);
+        $newBooking = new Appoinment($req->patientId, $req->doctorId, $req->date, $req->CalendarId, $req->status);
         $this->appoinmentRepository->insert($newBooking);
         return response()->json([
             'message' => 'You have successfully booked your appointment',
