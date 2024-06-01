@@ -17,6 +17,9 @@ use App\Dtos\Patient\ProfileRes;
 use App\Dtos\Patient\UpdateProfileRes;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
+use App\Dtos\Patient\UserRes;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -68,7 +71,7 @@ class PatientController extends Controller
         }
 
         return response()->json([
-            'status' =>200,
+            'status' => 200,
             'message' => 'Patient data retrieved successfully',
             'data' => new ProfileRes(
                 $patient->getUserId(),
@@ -115,39 +118,62 @@ class PatientController extends Controller
      *     @OA\Response(response=400, description="Invalid input")
      * )
      */
-    public function updateProfilePatient(UpdateProfileRes $req)
+    
+
+
+    public function updatePatient(Request $request, $id)
     {
+        $userRes = new UpdateProfileRes($request);
+
+        $urlImage = null;
+        if ($request->hasFile('urlImage')) {
+            $file = $request->file('urlImage');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $file->move(public_path('images'), $fileName);
+            $urlImage = $fileName;
+        }
+
         $user = new User(
             Role::Patient,
-            $req->email,
-            $req->password,
-            $req->fullName,
-            $req->address,
-            $req->phone,
-            $req->image 
+            $userRes->email,
+            $userRes->password,
+            $userRes->fullName,
+            $userRes->address,
+            $userRes->phone,
+            $urlImage
         );
+
         $patient = new Patient(
-            $req->id,
-            $req->healthCondition,
-            $req->note
+            $userRes->id,
+            $userRes->healthCondition,
+            $userRes->note
         );
-        $patient = $this->patientRepository->updatePatient($user, $patient, $req->id);
+
+        $updatedPatient = $this->patientRepository->updatePatient($user, $patient, $userRes->id);
+
         return response()->json([
-            'status'=> 200,
-            'message' => 'Patient profile updated successfully',
+            'status' => 200,
+            'message' => 'Patient profile updated successfully by method PUT',
             'data' => new ProfileRes(
-                $patient->getUserId(),
-                $patient->user->getEmail(),
-                $patient->user->getPassword(),
-                $patient->user->getFullName(),
-                $patient->user->getAddress(),
-                $patient->user->getPhone(),
-                $patient->user->getUrlImage(),
-                $patient->getHealthCondition(),
-                $patient->getNote()
+                $updatedPatient->getId(),
+                $updatedPatient->user->getEmail(),
+                $updatedPatient->user->getPassword(),
+                $updatedPatient->user->getFullName(),
+                $updatedPatient->user->getAddress(),
+                $updatedPatient->user->getPhone(),
+                $updatedPatient->user->getUrlImage(),
+                $updatedPatient->getHealthCondition(),
+                $updatedPatient->getNote()
             )
         ]);
     }
+
+
+
+
+
+
+
     /**
      * @OA\Get(
      *     path="/api/detail/{id}",
@@ -198,8 +224,8 @@ class PatientController extends Controller
                     $doctor->getDescription(),
                     $doctor->getMajor(),
                     $doctor->user->getEmail(),
-                    $doctor->user->getPassword(),
                     $doctor->user->getFullName(),
+                    $doctor->user->getPassword(),
                     $doctor->user->getAddress(),
                     $doctor->user->getPhone(),
                     $doctor->user->getUrlImage()
