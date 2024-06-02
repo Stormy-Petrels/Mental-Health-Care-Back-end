@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('doctorId', 200)->notNull();
             $table->date('dateBooking')->notNull();
             $table->string('calendarId', 200)->notNull();
+            $table->boolean('status')->default(false);
             $table->foreign('doctorId')->references('id')->on('doctors');
             $table->foreign('patientId')->references('id')->on('patients');
             $table->foreign('calendarId')->references('id')->on('calendars');
