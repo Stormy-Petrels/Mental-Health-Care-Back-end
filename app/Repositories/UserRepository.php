@@ -14,9 +14,6 @@ class UserRepository
 {
     private string $tableName = "users";
 
-
-
-
     public function insert(User $user)
     {
         $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -34,24 +31,6 @@ class UserRepository
             Carbon::now()
         ]);
     }
-
-
-    public function selectAll()
-    {
-    }
-
-
-    public function update(User $model)
-    {
-    }
-
-
-    public function delete(string $id)
-    {
-    }
-
-
-
 
     public function findByEmail($email)
     {
@@ -129,4 +108,7 @@ class UserRepository
         }
         return null;
     }
+
+
+    
 }

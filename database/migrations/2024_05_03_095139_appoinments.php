@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appoinments', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->string('id', 200)->unique()->primary();
             $table->string('patientId', 200)->notNull();
             $table->string('doctorId', 200)->notNull();
