@@ -1,6 +1,8 @@
 <?php
 
+
 namespace App\Repositories;
+
 
 use App\Models\Patient;
 use App\Models\User;
@@ -10,9 +12,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 
+
+
 class PatientRepository
 {
     private string $tableName = "patients";
+
 
     public function insert(Patient $patient)
     {
@@ -23,6 +28,7 @@ class PatientRepository
         ]);
     }
 
+
     public function findByEmail($email)
     {
         $result = DB::select("SELECT * FROM users
@@ -31,13 +37,16 @@ class PatientRepository
         return new Patient($newUser->id);
     }
 
+
     public function getInformationPatients()
     {
-        $results = DB::select("SELECT u.email, u.password, u.fullName, u.address, u.phone, u.urlImage, p.healthCondition, p.note, p.userId as patientId
+        $results = DB::select("SELECT u.email, u.password, u.fullName, u.address, u.phone, u.urlImage,u.isActive, p.healthCondition, p.note, p.userId as patientId
             FROM $this->tableName p
             JOIN users u ON p.userId = u.id;");
 
+
         $patients = [];
+
 
         foreach ($results as $result) {
             $patient = new Patient(
@@ -51,14 +60,17 @@ class PatientRepository
                     $result->fullName,
                     $result->address,
                     $result->phone,
-                    $result->urlImage
+                    $result->urlImage,
+                    $result->isActive
                 )
             );
             $patients[] = $patient;
         }
 
+
         return $patients;
     }
+
 
     public function getPatientById($id)
     {
@@ -75,10 +87,12 @@ class PatientRepository
         );
     }
 
+
     public function updatePatient(User $user, Patient $patient, string $id)
     {
         $user_sql = "UPDATE users SET email = ?, password = ?, fullName = ?, address = ?, phone = ?, urlImage = ? WHERE id = ?";
         $patient_sql = "UPDATE patients SET healthCondition = ?, note = ? WHERE userId = ?";
+
 
         DB::update($user_sql, [
             $user->getEmail(),
@@ -95,6 +109,7 @@ class PatientRepository
             $id
         ]);
 
+
         $newInformationUser = DB::selectOne("SELECT * FROM users WHERE id = ?", [$id]);
         $newInformationPatient = DB::selectOne(
             "
@@ -103,6 +118,7 @@ class PatientRepository
             WHERE patients.userId = ?",
             [$id]
         );
+
 
         return new Patient(
             $newInformationPatient->id,
@@ -119,12 +135,6 @@ class PatientRepository
             )
         );
     }
-
-
-    
-
-
-
     public function getDoctorById(string $id)
     {
         $query = DB::select("SELECT users.id AS userId, users.role, users.email, users.fullName, users.phone, users.address, users.password, users.urlImage,doctors.id, doctors.description, doctors.majorId, majors.name
@@ -135,6 +145,7 @@ class PatientRepository
         $result = $query[0];
         return new Doctor($result->id, $result->description, $result->name, new User(Role::Doctor, $result->email, $result->password, $result->fullName, $result->phone, $result->address, $result->urlImage));
     }
+
 
     public function createPatient($user, $patient)
     {
@@ -153,6 +164,7 @@ class PatientRepository
             Carbon::now()
         ]);
 
+
         $insertPatient = "INSERT INTO patients (id, userId, healthCondition, note, created_at, updated_at)
         VALUES (?, ?, ?, ?, ?, ?);";
         DB::insert($insertPatient, [
@@ -164,10 +176,12 @@ class PatientRepository
             Carbon::now()
         ]);
 
+
         $sql = "SELECT * FROM users JOIN patients ON users.id = patients.userId WHERE users.id = ?";
         $newPatient = DB::select($sql, [$user->getId()]);
 
 
+       
         return new
             Patient(
                 $newPatient[0]->id,
