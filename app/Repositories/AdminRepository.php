@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Dtos\Admin\DashboardStatsRes;
 use App\Dtos\Admin\DoctorStatsRes;
+use App\Dtos\Admin\MajorStatsRes;
 use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -62,5 +63,28 @@ class AdminRepository
         }
 
         return $doctors;
+    }
+
+
+    public function getMajors(): array
+    {
+        $results = DB::select("
+            SELECT 
+                majors.name AS majorName,
+                COUNT(doctors.id) AS totalDoctors
+            FROM majors
+            JOIN doctors ON majors.id = doctors.majorId
+            GROUP BY majors.id, majors.name
+        ");
+
+        $majors = [];
+        foreach ($results as $result) {
+            $majors[] = new MajorStatsRes(
+                $result->majorName,
+                $result->totalDoctors
+            );
+        }
+
+        return $majors;
     }
 }
