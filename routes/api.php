@@ -11,7 +11,6 @@ use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminDoctorController;
 use App\Http\Controllers\Patient\AppoinmentController;
-use App\Http\Controllers\Patient\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,8 +67,7 @@ Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
 Route::get('/appoinment', [AppoinmentController::class, 'getAppointments']);
 Route::get('/getTotalApointment', [AppoinmentController::class, 'getTotalAppointment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
-Route::post('/payment/vnpayment', [PaymentController::class, 'makePayment']);
-Route::post('/store/vnpayment', [PaymentController::class, 'storePaymenttofVNPAY']);
+
 
 
 Route::get('/patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
