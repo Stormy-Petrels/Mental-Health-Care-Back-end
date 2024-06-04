@@ -29,8 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); // ADMIN
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminPatientController::class, 'dashboard']);
+    Route::get('/stats', [AdminController::class, 'getStats']);
+    Route::get('/stats/doctors', [AdminController::class, 'getDoctors']);
+    Route::get('/stats/majors', [AdminController::class, 'getMajors']);
 
+
+
+    
+         
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);

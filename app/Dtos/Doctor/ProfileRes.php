@@ -27,7 +27,7 @@ class ProfileRes
     public string $fullName;
     public string $address;
     public string $phone;
-    public string $image;
+    public string|null $image;
     public string $description;
     public string $major;
 
@@ -42,7 +42,7 @@ class ProfileRes
      * @param string $description
      * @param string $major
      */
-    public function __construct(string $id, string $email, string $password, string $fullName, string $address, string $phone, string $image, string $description, string $major)
+    public function __construct(string $id, string $email, string $password, string $fullName, string $address, string $phone, ?string $image, string $description, string $major)
     {
         $this->id = $id;
         $this->email = $email;

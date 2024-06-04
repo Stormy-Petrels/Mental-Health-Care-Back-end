@@ -14,13 +14,14 @@ class AppoinmentsRepository
 
     public function insert(Appoinment $appoinment)
     {
-        $sql = "INSERT INTO $this->tableName (id,patientId,doctorId,dateBooking,calendarId) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id,patientId,doctorId,dateBooking,calendarId,status) VALUES (?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $appoinment->getId(),
             $appoinment->getPatientId(),
             $appoinment->getDocterId(),
             $appoinment->getDate(),
-            $appoinment->getTimeId()
+            $appoinment->getTimeId(),
+            $appoinment->getStatus(),
         ]);
     }
 

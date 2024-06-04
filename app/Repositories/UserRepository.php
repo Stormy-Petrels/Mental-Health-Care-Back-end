@@ -1,50 +1,42 @@
 <?php
 
+
 namespace App\Repositories;
+
 
 use Illuminate\Support\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
+
 class UserRepository
 {
     private string $tableName = "users";
 
-
     public function insert(User $user)
     {
-        $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO $this->tableName (id, role, email, password, fullName, address, phone, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
             $user->getRole()->getValue(),
             $user->getEmail(),
             $user->getPassword(),
             $user->getFullName(),
-            $user->getPhone(),
             $user->getAddress(),
+            $user->getPhone(),
+            $user->getUrlImage(),
+            $user->getStatus(),
             Carbon::now(),
             Carbon::now()
         ]);
     }
 
-    public function selectAll()
-    {
-    }
-
-    public function update(User $model)
-    {
-    }
-
-    public function delete(string $id)
-    {
-    }
-
-
     public function findByEmail($email)
     {
         $result = DB::select("SELECT * FROM users
         WHERE email = ? LIMIT 1", [$email]);
+
 
         if (!empty($result)) {
             $newUser = $result[0];
@@ -63,19 +55,22 @@ class UserRepository
                 $newUser->address == null ? "" : $newUser->address,
                 $newUser->phone == null ? "" : $newUser->phone,
                 $newUser->urlImage == null ? "" : $newUser->urlImage,
-                $newUser->isActive == null ? "" : $newUser->isActive
+                $newUser->isActive
             );
         }
         return null;
     }
 
+
     public function updateStatusUsersActive($userId)
     {
         $user = DB::update("UPDATE users SET users.isActive = '1' WHERE users.id = $userId;");
- dd($user);
+
+
         // if ($user > 0) {
             $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
             $transferResult = $result[0];
+
 
             return new User(
                 $transferResult->role === "patient" ? Role::Patient : ($transferResult->role === "cashier" ? Role::Cashier : Role::Doctor),
@@ -90,13 +85,16 @@ class UserRepository
         //   return null;
     }
 
+
     public function updateStatusUsersInactive($userId)
     {
         $user = DB::update("UPDATE users SET users.isActive = '0' WHERE users.id = $userId;");
 
+
         if ($user > 0) {
             $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
             $transferResult = $result[0];
+
 
             return new User(
                 $transferResult->role === "patient" ? Role::Patient : ($transferResult->role === "cashier" ? Role::Cashier : Role::Doctor),
@@ -110,4 +108,7 @@ class UserRepository
         }
         return null;
     }
+
+
+    
 }
