@@ -13,6 +13,9 @@ use App\Models\Doctor;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 
+
+
+
 /**
  * @OA\Tag(
  *     name="Doctor",
@@ -27,7 +30,7 @@ class DoctorController extends Controller
     {
         $this->doctorRepository = new DoctorRepository();
     }
-  /**
+    /**
      * @OA\Get(
      *     path="/api/doctor/profile/{id}",
      *     summary="View Profile Doctor",
@@ -51,29 +54,30 @@ class DoctorController extends Controller
      *     @OA\Response(response=404, description="Doctor not found")
      * )
      */
-    public function profileDoctor($id){
+    public function profileDoctor($id)
+    {
 
-        $doctor = $this->doctorRepository->getDoctorById($id);  
-        
+        $doctor = $this->doctorRepository->getDoctorById($id);
+
         return response()->json(
             [
-            'status'=>200,
-            'message' => 'View profile doctor successfully',
-            'doctor' => new ProfileRes(
-                $doctor->getUserId(),
-                $doctor->user->getEmail(),
-                $doctor->user->getPassword(),
-                $doctor->user->getFullName(),
-                $doctor->user->getAddress(),
-                $doctor->user->getPhone(),
-                $doctor->user->getUrlImage(),
-                $doctor->getDescription(),
-                $doctor->getMajor(),
-            )
+                'status' => 200,
+                'message' => 'View profile doctor successfully',
+                'doctor' => new ProfileRes(
+                    $doctor->getUserId(),
+                    $doctor->user->getEmail(),
+                    $doctor->user->getPassword(),
+                    $doctor->user->getFullName(),
+                    $doctor->user->getAddress(),
+                    $doctor->user->getPhone(),
+                    $doctor->user->getUrlImage(),
+                    $doctor->getDescription(),
+                    $doctor->getMajor(),
+                )
             ]
         );
     }
-/**
+    /**
      * @OA\Post(
      *     path="/api/updateProfile/doctor/{id}",
      *     summary="Update Profile Doctor",
@@ -106,6 +110,7 @@ class DoctorController extends Controller
      */
     public function updateProfileDoctor(UpdateProfileReq $req)
     {
+        $imageUrl = $req->image !== null ? $req->image : '';
         $user = new User(
             Role::Doctor,
             $req->email,
@@ -113,7 +118,7 @@ class DoctorController extends Controller
             $req->fullName,
             $req->address,
             $req->phone,
-            $req->image ?? ''
+            $imageUrl
         );
 
         $doctor = new Doctor(
@@ -138,12 +143,12 @@ class DoctorController extends Controller
         ]);
     }
 
-    public function getAllMajors(){
+    public function getAllMajors()
+    {
         $majors = $this->doctorRepository->getAllMajors();
         return response()->json([
             'message' => 'Majors',
             'data' => $majors
         ]);
     }
-
 }

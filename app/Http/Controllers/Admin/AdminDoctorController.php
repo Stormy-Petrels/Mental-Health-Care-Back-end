@@ -78,7 +78,7 @@ class AdminDoctorController extends Controller
             $file = $request->file('urlImage');
             $fileName = time().'_'.$file->getClientOriginalName();
             $file->move(public_path('images'), $fileName);
-            $user->setUrlImage($fileName);  
+            $user->setUrlImage($fileName); 
         }
     
         $doctor = new Doctor(
