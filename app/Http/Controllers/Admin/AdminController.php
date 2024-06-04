@@ -8,12 +8,16 @@ use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use App\Repositories\AdminRepository;
+
 class AdminController extends Controller
 {
     private UserRepository $usersRepository;
+    private AdminRepository $adminRepository;
     public function __construct()
     {
         $this->usersRepository = new UserRepository();
+        $this->adminRepository = new AdminRepository();
     }
 
     public function updateStatusUsersActive($userId)
@@ -37,4 +41,32 @@ class AdminController extends Controller
                 'User' => $user,
             ]);
     }
+
+    public function getStats()
+    {
+        $stats = $this->adminRepository->getStats();
+        return response()->json([
+            'status' => 200,
+            'data' => $stats
+        ]);
+    }
+
+    public function getDoctors()
+    {
+        $doctors = $this->adminRepository->getDoctors();
+        return response()->json([
+            'status' => 200,
+            'data' => $doctors
+        ]);
+    }
+
+    public function getMajors()
+    {
+        $majors = $this->adminRepository->getMajors();
+        return response()->json([
+           'status' => 200,
+            'data' => $majors
+        ]);
+    }
+    
 }

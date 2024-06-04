@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appoinments', function (Blueprint $table) {
+        Schema::create('appointments', function (Blueprint $table) {
             $table->string('id', 200)->unique()->primary();
             $table->string('patientId', 200)->notNull();
             $table->string('doctorId', 200)->notNull();
             $table->date('dateBooking')->notNull();
             $table->string('calendarId', 200)->notNull();
+            $table->boolean('status')->default(false);
             $table->foreign('doctorId')->references('id')->on('doctors');
             $table->foreign('patientId')->references('id')->on('patients');
             $table->foreign('calendarId')->references('id')->on('calendars');

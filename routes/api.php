@@ -29,19 +29,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post("/sign-up",  [SignUpController::class, 'signUp']); // ADMIN
 Route::prefix('admin')->group(function () {
-    Route::get('/', [AdminPatientController::class, 'dashboard']);
+    Route::get('/stats', [AdminController::class, 'getStats']);
+    Route::get('/stats/doctors', [AdminController::class, 'getDoctors']);
+    Route::get('/stats/majors', [AdminController::class, 'getMajors']);
 
+
+
+    
+         
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);
-
+        Route::post('/profile/{id}', [AdminPatientController::class, 'updateProfilePatient']);
         // Route::get('/search', [AdminPatientController::class, 'search']);
     });
     Route::prefix('doctors')->group(function () {
         Route::get('/', [AdminDoctorController::class, 'getAllDoctors']);
         Route::post('/create', [AdminDoctorController::class, 'createDoctor']);
-        // Route::put('{user_id}/update', [AdminPatientController::class, 'update'])->name('update.patient');
-        // Route::get('/search', [AdminPatientController::class, 'search']);
     });
 
     Route::prefix('users')->group(function () {
@@ -55,18 +59,21 @@ Route::post("/sign-in",  [SignInController::class, 'signIn']);
 Route::get('/detail/{id}', [PatientController::class, 'ViewInformationDoctor']);
 
 Route::get('/profile/{id}', [PatientController::class, 'profilePatient']);
-Route::post('/profile/{id}', [PatientController::class, 'updateProfilePatient']);
 
-Route::post("/doctor/profile", [DoctorController::class, 'profileDoctor']);
+Route::post('/profile/{id}/edit', [PatientController::class, 'updatePatient']);
+
+
 Route::get("/doctor/profile/{id}", [DoctorController::class, 'profileDoctor']);
-Route::post('/updateProfile/doctor/{id}', [DoctorController::class, 'updateProfileDoctor']);
+Route::post('/updateProfile/doctor', [DoctorController::class, 'updateProfileDoctor']);
+
+
 Route::get('/major', [DoctorController::class, 'getAllMajors']);
 
-// Route::get('/Admin/getAllDoctor', [AdminDoctorController::class, 'getAllDoctors']);
-
 Route::post('/appoinment', [AppoinmentController::class, 'appoinment']);
+Route::get('/appoinment', [AppoinmentController::class, 'getAppointments']);
+Route::get('/getTotalApointment', [AppoinmentController::class, 'getTotalAppointment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 
 
-Route::get('/Patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
+Route::get('/patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);

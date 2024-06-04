@@ -1,8 +1,11 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
+
 namespace App\Http\Controllers\Admin;
+
 
 use App\Http\Controllers\Controller;
 use App\Repositories\AdminRepository;
@@ -18,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Dtos\Admin\PatientRes;
 use App\Dtos\Admin\PatientReq;
+
 
 class AdminPatientController extends Controller
 {
@@ -115,24 +119,20 @@ class AdminPatientController extends Controller
                 $patient->user->getFullName(),
                 $patient->user->getAddress(),
                 $patient->user->getPhone(),
-                $patient->user->getUrlImage()
+                $patient->user->getUrlImage(),
+                $patient->user->getStatus()
             );
         }
-
         return response()->json([
             'message' => 'Successfully',
             'payload' => $patientResponses
         ]);
     }
-
-
     public function createPatient(PatientReq $request)
-    {   
+    {  
         $user = new User($request->role, $request->email, $request->password, $request->fullName, $request->address, $request->phone,  $request->urlImage, $request->isActive);
         $doctor = new Patient($user->getId(), $request->healthCondition, $request->note);
-        
         $patient = $this->patientRepository->createPatient($user, $doctor);
-
         $result = new PatientRes(
             $patient->getUserId(),
             $patient->getHealthCondition(),

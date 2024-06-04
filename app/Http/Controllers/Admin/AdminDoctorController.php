@@ -49,7 +49,7 @@ class AdminDoctorController extends Controller
                 $doctor->user->getAddress(),
                 $doctor->user->getPhone(),
                 $doctor->user->getUrlImage(),
-                $doctor->user->getStatus()
+                $doctor->user->getStatus(),
             );
         }
 

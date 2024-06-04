@@ -43,7 +43,7 @@ class DoctorRepository
             FROM users
             JOIN doctors ON users.id = doctors.userId
             JOIN majors ON doctors.majorId = majors.id
-            WHERE users.role = 'doctor'
+            WHERE users.role = 'doctor' AND users.isActive = '1'
         ");
 
         $doctors = [];
@@ -71,16 +71,16 @@ class DoctorRepository
         return $doctors;
     }
 
-    public function getAvailableTimesForBooking($selectedDate, $Doctorid)
+    public function getAvailableTimesForBooking($selectedDate, $DoctorId)
     {
         $query = "SELECT lt.*,c.id
         FROM calendars AS c
         JOIN listTimeDoctors AS lt ON c.timeId = lt.id
-        WHERE c.doctorId = '$Doctorid' AND c.date = '$selectedDate'
+        WHERE c.doctorId = '$DoctorId' 
           AND NOT EXISTS (
             SELECT 1
             FROM appoinments AS a
-            WHERE a.calendarId = c.id
+            WHERE a.calendarId = c.id AND a.dateBooking = '$selectedDate'
           );";
         $result = DB::select($query);
         $collection = collect($result);
