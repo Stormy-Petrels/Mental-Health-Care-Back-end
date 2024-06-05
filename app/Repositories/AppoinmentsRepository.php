@@ -6,6 +6,7 @@ use App\Models\Appoinment;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
 use App\Dtos\Admin\AppointmentRes;
+use App\Dtos\Patient\AppointmentHistoryRes;
 use App\Dtos\Admin\ChartRes;
 
 class AppoinmentsRepository
@@ -129,38 +130,41 @@ class AppoinmentsRepository
     public function getAppointmentHistory($id)
     {
         try {
-            $appointments = DB::table('appoinments as a')
+            $appointments = DB::table('appointments as a')
                 ->join('patients as p', 'a.patientId', '=', 'p.id')
                 ->join('users as u1', 'p.userId', '=', 'u1.id')
                 ->join('doctors as d', 'a.doctorId', '=', 'd.id')
                 ->join('users as u2', 'd.userId', '=', 'u2.id')
                 ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
-                ->where('p.id', '=', $id)  
+                ->where('p.id', '=', $id)
                 ->select(
                     'a.id as appointmentId',
                     'a.dateBooking as date',
+                    'a.status',
                     'u1.fullName as patientName',
                     'u2.fullName as doctorName',
                     'lt.timeStart as timeStart',
-                    'lt.timeEnd as timeEnd'
+                    'lt.timeEnd as timeEnd',
+                    'lt.price as price'
                 )
                 ->get();
 
             $objectAppointments = $appointments->map(function ($appointment) {
-                return new AppointmentRes(
+                return new AppointmentHistoryRes(
                     $appointment->appointmentId,
                     $appointment->patientName,
                     $appointment->doctorName,
+                    $appointment->price,
                     $appointment->date,
                     $appointment->timeStart,
-                    $appointment->timeEnd
+                    $appointment->timeEnd,
+                    $appointment->status
                 );
             });
 
             return $objectAppointments;
         } catch (\Exception $e) {
-            return collect(); 
+            return collect();
         }
     }
-
 }
