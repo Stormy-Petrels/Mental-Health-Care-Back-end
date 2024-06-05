@@ -6,11 +6,12 @@ use App\Models\Appoinment;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
 use App\Dtos\Admin\AppointmentRes;
+use App\Dtos\Patient\AppointmentHistoryRes;
 use App\Dtos\Admin\ChartRes;
 
 class AppoinmentsRepository
 {
-    private string $tableName = "appoinments";
+    private string $tableName = "appoinments"; 
 
     public function insert(Appoinment $appoinment)
     {
@@ -135,32 +136,37 @@ class AppoinmentsRepository
                 ->join('doctors as d', 'a.doctorId', '=', 'd.id')
                 ->join('users as u2', 'd.userId', '=', 'u2.id')
                 ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
-                ->where('p.id', '=', $id)  
+                ->where('p.id', '=', $id)
                 ->select(
                     'a.id as appointmentId',
                     'a.dateBooking as date',
+                    'a.status',
                     'u1.fullName as patientName',
+                    'u2.urlImage as image',
                     'u2.fullName as doctorName',
                     'lt.timeStart as timeStart',
-                    'lt.timeEnd as timeEnd'
+                    'lt.timeEnd as timeEnd',
+                    'lt.price as price'
                 )
                 ->get();
 
             $objectAppointments = $appointments->map(function ($appointment) {
-                return new AppointmentRes(
+                return new AppointmentHistoryRes(
                     $appointment->appointmentId,
                     $appointment->patientName,
                     $appointment->doctorName,
+                    $appointment->image,
+                    $appointment->price,
                     $appointment->date,
                     $appointment->timeStart,
-                    $appointment->timeEnd
+                    $appointment->timeEnd,
+                    $appointment->status
                 );
             });
 
             return $objectAppointments;
         } catch (\Exception $e) {
-            return collect(); 
+            return collect();
         }
     }
-
 }
