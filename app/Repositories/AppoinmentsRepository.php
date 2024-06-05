@@ -11,7 +11,7 @@ use App\Dtos\Admin\ChartRes;
 
 class AppoinmentsRepository
 {
-    private string $tableName = "appoinments";
+    private string $tableName = "appoinments"; 
 
     public function insert(Appoinment $appoinment)
     {
@@ -130,7 +130,7 @@ class AppoinmentsRepository
     public function getAppointmentHistory($id)
     {
         try {
-            $appointments = DB::table('appointments as a')
+            $appointments = DB::table('appoinments as a')
                 ->join('patients as p', 'a.patientId', '=', 'p.id')
                 ->join('users as u1', 'p.userId', '=', 'u1.id')
                 ->join('doctors as d', 'a.doctorId', '=', 'd.id')
@@ -142,6 +142,7 @@ class AppoinmentsRepository
                     'a.dateBooking as date',
                     'a.status',
                     'u1.fullName as patientName',
+                    'u2.urlImage as image',
                     'u2.fullName as doctorName',
                     'lt.timeStart as timeStart',
                     'lt.timeEnd as timeEnd',
@@ -154,6 +155,7 @@ class AppoinmentsRepository
                     $appointment->appointmentId,
                     $appointment->patientName,
                     $appointment->doctorName,
+                    $appointment->image,
                     $appointment->price,
                     $appointment->date,
                     $appointment->timeStart,
