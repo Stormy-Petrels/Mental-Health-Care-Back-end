@@ -11,6 +11,7 @@ use App\Http\Controllers\Patient\PatientController;
 use App\Http\Controllers\Doctor\DoctorController;
 use App\Http\Controllers\Admin\AdminDoctorController;
 use App\Http\Controllers\Patient\AppoinmentController;
+use App\Http\Controllers\Patient\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,3 +77,6 @@ Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
 Route::get('/patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
 Route::get('/appointments/history/{id}', [PatientController::class, 'viewHistoryAppointments']);
+
+Route::post('/payment/vnpayment', [PaymentController::class, 'makePayment']);
+Route::post('/store/vnpayment', [PaymentController::class, 'storePaymenttofVNPAY']);
