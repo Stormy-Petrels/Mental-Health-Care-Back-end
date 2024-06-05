@@ -43,7 +43,7 @@ class DoctorRepository
             FROM users
             JOIN doctors ON users.id = doctors.userId
             JOIN majors ON doctors.majorId = majors.id
-            WHERE users.role = 'doctor' AND users.isActive = '1'
+            WHERE users.role = 'doctor' 
         ");
 
         $doctors = [];
