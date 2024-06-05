@@ -125,4 +125,42 @@ class AppoinmentsRepository
             return "No user found with this email";
         }
     }
+
+    public function getAppointmentHistory($id)
+    {
+        try {
+            $appointments = DB::table('appoinments as a')
+                ->join('patients as p', 'a.patientId', '=', 'p.id')
+                ->join('users as u1', 'p.userId', '=', 'u1.id')
+                ->join('doctors as d', 'a.doctorId', '=', 'd.id')
+                ->join('users as u2', 'd.userId', '=', 'u2.id')
+                ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
+                ->where('p.id', '=', $id)  
+                ->select(
+                    'a.id as appointmentId',
+                    'a.dateBooking as date',
+                    'u1.fullName as patientName',
+                    'u2.fullName as doctorName',
+                    'lt.timeStart as timeStart',
+                    'lt.timeEnd as timeEnd'
+                )
+                ->get();
+
+            $objectAppointments = $appointments->map(function ($appointment) {
+                return new AppointmentRes(
+                    $appointment->appointmentId,
+                    $appointment->patientName,
+                    $appointment->doctorName,
+                    $appointment->date,
+                    $appointment->timeStart,
+                    $appointment->timeEnd
+                );
+            });
+
+            return $objectAppointments;
+        } catch (\Exception $e) {
+            return collect(); 
+        }
+    }
+
 }

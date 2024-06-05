@@ -74,6 +74,5 @@ Route::get('/appoinment', [AppoinmentController::class, 'getAppointments']);
 Route::get('/getTotalApointment', [AppoinmentController::class, 'getTotalAppointment']);
 Route::post('/time', [AppoinmentController::class, 'checkTime']);
 
-
-
 Route::get('/patient/viewListDoctors', [PatientController::class, 'viewListDoctors']);
+Route::get('/appointments/history/{id}', [PatientController::class, 'viewHistoryAppointments']);
