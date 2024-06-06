@@ -16,7 +16,7 @@ return new class extends Migration
             $table->index('id', 'idxListTimeDoctorId');
             $table->string('timeStart')->notNull();
             $table->string('timeEnd')->notNull();
-            $table->decimal('price', 10, 2)->nullable();
+            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }
