@@ -139,8 +139,44 @@ class DoctorRepository
         );
     }
 
+    // public function createDoctor($user, $doctor)
+    // {
+    //     $sql = "INSERT INTO users (id, role, fullName, email, password, phone, address, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    //     DB::insert($sql, [
+    //         $user->getId(),
+    //         $user->getRole()->getValue(),
+    //         $user->getFullname(),
+    //         $user->getEmail(),
+    //         $user->getPassword(),
+    //         $user->getPhone(),
+    //         $user->getAddress(),
+    //         $user->getUrlImage(),
+    //         "1",
+    //         Carbon::now(),
+    //         Carbon::now()
+    //     ]);
+    //     $sqlInsertDoctor = "INSERT INTO doctors (id, userId, description, majorId, created_at, updated_at)
+    //     VALUES (?, ?, ?, ?, ?, ?);";
+    //     DB::insert($sqlInsertDoctor, [
+    //         $user->getId(),
+    //         $user->getId(),
+    //         $doctor->getDescription(),
+    //         $doctor->getMajor(),
+    //         Carbon::now(),
+    //         Carbon::now()
+    //     ]);
+
+    //     $sql = "SELECT * FROM users JOIN doctors ON users.id = doctors.userId WHERE users.id = ?";
+    //     $newUserResult = DB::select($sql, [$user->getId()]);
+    //     return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User(Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->address, $newUserResult[0]->phone, $newUserResult[0]->urlImage, $newUserResult[0]->isActive));
+    // }
+
+
     public function createDoctor($user, $doctor)
-    {
+{
+    DB::beginTransaction();
+
+    try {
         $sql = "INSERT INTO users (id, role, fullName, email, password, phone, address, urlImage, isActive, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         DB::insert($sql, [
             $user->getId(),
@@ -156,7 +192,7 @@ class DoctorRepository
             Carbon::now()
         ]);
         $sqlInsertDoctor = "INSERT INTO doctors (id, userId, description, majorId, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?);";
+                            VALUES (?, ?, ?, ?, ?, ?)";
         DB::insert($sqlInsertDoctor, [
             $user->getId(),
             $user->getId(),
@@ -166,10 +202,44 @@ class DoctorRepository
             Carbon::now()
         ]);
 
+        DB::commit();
         $sql = "SELECT * FROM users JOIN doctors ON users.id = doctors.userId WHERE users.id = ?";
         $newUserResult = DB::select($sql, [$user->getId()]);
-        return new Doctor($newUserResult[0]->id, $newUserResult[0]->description, $newUserResult[0]->majorId, new User(Role::Doctor, $newUserResult[0]->email, $newUserResult[0]->password, $newUserResult[0]->fullName, $newUserResult[0]->address, $newUserResult[0]->phone, $newUserResult[0]->urlImage, $newUserResult[0]->isActive));
+        return new Doctor(
+            $newUserResult[0]->id,
+            $newUserResult[0]->description,
+            $newUserResult[0]->majorId,
+            new User(
+                Role::Doctor,
+                $newUserResult[0]->email,
+                $newUserResult[0]->password,
+                $newUserResult[0]->fullName,
+                $newUserResult[0]->address,
+                $newUserResult[0]->phone,
+                $newUserResult[0]->urlImage,
+                $newUserResult[0]->isActive
+            )
+        );
+    } catch (\Exception $e) {
+        DB::rollBack();
+        throw $e;
     }
+}
+
+public function createDoctorCalendars($doctorId)
+{
+    $timeSlots = DB::table('listtimedoctors')->select('id')->get();
+    foreach ($timeSlots as $timeSlot) {
+        $sqlInsertCalendar = "INSERT INTO calendars (doctorId, timeId)
+                              VALUES (?, ?)";
+        DB::insert($sqlInsertCalendar, [
+            $doctorId,
+            $timeSlot->id
+        ]);
+    }
+}
+
+
 
     public function getAllMajors()
     {
