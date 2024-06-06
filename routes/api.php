@@ -34,10 +34,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/stats/doctors', [AdminController::class, 'getDoctors']);
     Route::get('/stats/majors', [AdminController::class, 'getMajors']);
 
-
-
-    
-         
     Route::prefix('patients')->group(function () {
         Route::get('/', [AdminPatientController::class, 'getAllPatients']);
         Route::post('/create', [AdminPatientController::class, 'createPatient']);
