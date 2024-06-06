@@ -17,6 +17,7 @@ use App\Dtos\Patient\ProfileRes;
 use App\Dtos\Patient\UpdateProfileRes;
 use Illuminate\Support\Facades\DB;
 use App\Repositories\DoctorRepository;
+use App\Repositories\AppoinmentsRepository;
 use App\Dtos\Patient\UserRes;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\Request;
@@ -31,11 +32,13 @@ class PatientController extends Controller
 {
     private $patientRepository;
     private $doctorRepository;
+    private $appoinmentsRepository;
 
-    public function __construct(PatientRepository $patientRepository, DoctorRepository $doctorRepository)
+    public function __construct(PatientRepository $patientRepository, DoctorRepository $doctorRepository, AppoinmentsRepository $appoinmentsRepository)
     {
         $this->patientRepository = $patientRepository;
         $this->doctorRepository = $doctorRepository;
+        $this->appoinmentsRepository = $appoinmentsRepository;
     }
 
     /**
@@ -119,8 +122,6 @@ class PatientController extends Controller
      * )
      */
     
-
-
     public function updatePatient(Request $request, $id)
     {
         $userRes = new UpdateProfileRes($request);
@@ -167,12 +168,6 @@ class PatientController extends Controller
             )
         ]);
     }
-
-
-
-
-
-
 
     /**
      * @OA\Get(
@@ -234,7 +229,6 @@ class PatientController extends Controller
         );
     }
 
-
     public function viewListDoctors()
     {
         $doctors = $this->doctorRepository->queryAllDoctors();
@@ -259,5 +253,32 @@ class PatientController extends Controller
             'message' => 'Successfully retrieved list of doctors',
             'payload' => $doctorResponses
         ]);
+    }
+
+    public function viewHistoryAppointments($id)
+    {
+        try {
+            $appointments = $this->appoinmentsRepository->getAppointmentHistory($id);
+
+            if ($appointments->isEmpty()) {
+                return response()->json([
+                    'status' => 404,
+                    'message' => 'No appointment history found for the given patient.'
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Appointment history retrieved successfully.',
+                'appointments' => $appointments
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 500,
+                'message' => 'An error occurred while retrieving the appointment history.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
