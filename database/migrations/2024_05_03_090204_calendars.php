@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('calendars', function (Blueprint $table) {
-            $table->string('id', 200)->unique()->primary()->autoIncrement();
+            $table->increments('id');
             $table->string('doctorId', 200)->notNull();
             $table->string('timeId', 200)->notNull();
             $table->foreign('doctorId')->references('id')->on('doctors');
