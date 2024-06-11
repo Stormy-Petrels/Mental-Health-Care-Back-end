@@ -43,6 +43,42 @@ class DoctorRepository
             FROM users
             JOIN doctors ON users.id = doctors.userId
             JOIN majors ON doctors.majorId = majors.id
+            WHERE users.role = 'doctor' AND users.isActive = 1
+        ");
+
+        $doctors = [];
+
+        foreach ($results as $result) {
+            $doctor = new Doctor(
+                $result->doctor_id,
+                $result->description,
+                $result->majorName,
+                new User(
+                    Role::Doctor,
+                    $result->email,
+                    $result->password,
+                    $result->fullName,
+                    $result->address,
+                    $result->phone,
+                    $result->urlImage,
+                    $result->isActive,
+                )
+            );
+
+            $doctors[] = $doctor;
+        }
+
+        return $doctors;
+    }
+
+
+    public function getAllDoctors()
+    {
+        $results = DB::select("
+            SELECT users.*, doctors.id AS doctor_id, doctors.description, doctors.majorId, majors.name AS majorName
+            FROM users
+            JOIN doctors ON users.id = doctors.userId
+            JOIN majors ON doctors.majorId = majors.id
             WHERE users.role = 'doctor' 
         ");
 
@@ -70,6 +106,8 @@ class DoctorRepository
 
         return $doctors;
     }
+
+    
 
     public function getAvailableTimesForBooking($selectedDate, $DoctorId)
     {

@@ -49,7 +49,7 @@ class AdminRepository
             LEFT JOIN listtimedoctors ON calendars.timeId = listtimedoctors.id
             GROUP BY doctors.id, users.fullName, users.urlImage, users.email, majors.name
             ORDER BY totalSlots DESC
-        LIMIT 10
+            LIMIT 10
         ");
 
         $doctors = [];
