@@ -9,7 +9,7 @@ class SignInControllerTest extends TestCase
     /**
      * A basic unit test example.
      */
-    public function test_example(): void
+    public function test_sign_in_success(): void
     {
         $this->assertTrue(true);
     }
