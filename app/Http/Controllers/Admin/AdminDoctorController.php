@@ -35,7 +35,7 @@ class AdminDoctorController extends Controller
 
     public function getAllDoctors()
     {
-        $doctors = $this->doctorRepository->queryAllDoctors();
+        $doctors = $this->doctorRepository->getAllDoctors();
     
         $doctorResponses = [];
 
