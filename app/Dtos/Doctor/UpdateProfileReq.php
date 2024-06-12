@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Dtos\Doctor;
-use App\Repositories\DoctorRepository; 
+
+use App\Repositories\DoctorRepository;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,7 +41,7 @@ class UpdateProfileReq
             ], 400)->throwResponse();
         }
 
-     
+
         if (!isset($data['image']) || $data['image'] === '') {
             $doctor = $doctorRepository->getDoctorById($data['id']);
             $this->image = $doctor->user->getUrlImage();
@@ -63,7 +64,7 @@ class UpdateProfileReq
     {
         return [
             'id' => 'required',
-            'email' => 'required|unique:users,email',
+            'email' => 'required',
             'password' => 'required|min:8',
             'fullName' => 'required',
             'address' => 'required',
