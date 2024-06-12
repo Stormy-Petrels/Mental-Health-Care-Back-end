@@ -7,6 +7,7 @@ use App\Dtos\Common\SignInRes;
 use App\Dtos\Common\SignInReq;
 use App\Repositories\UserRepository;
 use App\Repositories\PatientRepository;
+use Illuminate\Support\Facades\Hash;
 
 class SignInController extends Controller
 {
@@ -53,18 +54,17 @@ class SignInController extends Controller
     {
         $user = $this->userRepository->findByEmail($req->email);
 
-        if ($user == "" || $user->getPassword() != $req->password) {
-            return response()->json([
-                'message' => 'User not found or invalid credentials',
-            ], 401);
+        if ($user === null || !Hash::check($req->password, $user->getPassword())) {
+            return $this->unauthorized('User not found or invalid credentials');
         }
-        if($user->getStatus() == 0){
-            return response()->json([
-                'message' => 'account has been locked',
-            ], 401);
+
+        if ($user->getStatus() === 0) {
+            return $this->unauthorized('Account has been locked');
         }
+
         $patient = $this->patientRepository->findByEmail($req->email);
-        return response()->json([
+
+        return $this->success([
             'message' => 'Sign in Successfully',
             'payload' => new SignInRes(
                 $patient->getUserId(),
@@ -76,6 +76,18 @@ class SignInController extends Controller
                 $user->getAddress(),
                 $user->getUrlImage()
             )
-        ],200);
+        ]);
+    }
+
+    protected function unauthorized($message)
+    {
+        return response()->json([
+            'message' => $message,
+        ], 401);
+    }
+
+    protected function success($data, $status = 200)
+    {
+        return response()->json($data, $status);
     }
 }

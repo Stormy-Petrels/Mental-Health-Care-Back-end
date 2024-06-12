@@ -34,31 +34,35 @@ class UserRepository
 
     public function findByEmail($email)
     {
-        $result = DB::select("SELECT * FROM users
-        WHERE email = ? LIMIT 1", [$email]);
+        $user = DB::table('users')
+            ->where('email', $email)
+            ->first();
 
+        if ($user) {
+            $role = $this->mapRole($user->role);
 
-        if (!empty($result)) {
-            $newUser = $result[0];
-            if ($newUser->role == "admin") {
-                $role = Role::Admin;
-            } elseif ($newUser->role == "doctor") {
-                $role = Role::Doctor;
-            } else {
-                $role = Role::Patient;
-            }
             return new User(
                 $role,
-                $newUser->email,
-                $newUser->password,
-                $newUser->fullName,
-                $newUser->address == null ? "" : $newUser->address,
-                $newUser->phone == null ? "" : $newUser->phone,
-                $newUser->urlImage == null ? "" : $newUser->urlImage,
-                $newUser->isActive
+                $user->email,
+                $user->password,
+                $user->fullName,
+                $user->address ?? '',
+                $user->phone ?? '',
+                $user->urlImage ?? '',
+                $user->isActive
             );
         }
+
         return null;
+    }
+
+    private function mapRole($roleString)
+    {
+        return match ($roleString) {
+            'admin' => Role::Admin,
+            'doctor' => Role::Doctor,
+            default => Role::Patient,
+        };
     }
 
 
