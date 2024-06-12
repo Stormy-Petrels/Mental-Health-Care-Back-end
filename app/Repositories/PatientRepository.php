@@ -29,12 +29,19 @@ class PatientRepository
     }
 
 
-    public function findByEmail($email)
+    public function findByEmail(string $email): Patient
     {
-        $result = DB::select("SELECT * FROM users
-        WHERE email = ? LIMIT 1", [$email]);
-        $newUser = $result[0];
-        return new Patient($newUser->id);
+        $result = DB::select(
+            "SELECT * FROM users WHERE email = ? LIMIT 1",
+            [$email]
+        );
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $userData = $result[0];
+        return new Patient($userData->id);
     }
 
 
