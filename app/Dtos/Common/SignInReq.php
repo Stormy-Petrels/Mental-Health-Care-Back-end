@@ -4,6 +4,7 @@ namespace App\Dtos\Common;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 /**
  * @OA\Schema(
  *     schema="SignInReqCommon",
@@ -29,23 +30,30 @@ class SignInReq
 
     public function __construct(Request $request)
     {
-        $data = [
-            'email' => $request->input("email"),
-            'password' => $request->input("password"),
-        ];
-    
-        $validator = Validator::make($data, $this->rules());
-    
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422)->throwResponse();
-        }
         $this->email = $request->input("email");
         $this->password = $request->input("password");
+
+        $this->validateInput();
     }
 
-    public function rules(): array
+    protected function validateInput(): void
+    {
+        $data = [
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
+
+        $validator = Validator::make($data, $this->rules());
+
+        if ($validator->fails()) {
+            $response = response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+            $response->throwResponse();
+        }
+    }
+
+    protected function rules(): array
     {
         return [
             'email' => 'required|email',
