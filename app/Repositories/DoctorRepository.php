@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use App\Models\Time;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+
 
 class DoctorRepository
 {
@@ -139,7 +141,7 @@ class DoctorRepository
         $doctor_sql = "UPDATE doctors SET description = ?, majorId = ? WHERE userId = ?";
         DB::update($user_sql, [
             $user->getEmail(),
-            $user->getPassword(),
+            hash::make($user->getPassword()),
             $user->getFullName(),
             $user->getAddress(),
             $user->getPhone(),
