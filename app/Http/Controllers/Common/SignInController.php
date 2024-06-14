@@ -71,7 +71,7 @@ class SignInController extends Controller
                 $user->getRole()->getValue(),
                 $user->getEmail(),
                 $user->getFullName(),
-                $user->getPassword(),
+                $req->password,
                 $user->getPhone(),
                 $user->getAddress(),
                 $user->getUrlImage()
