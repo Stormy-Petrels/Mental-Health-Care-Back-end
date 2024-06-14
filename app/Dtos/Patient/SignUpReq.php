@@ -4,6 +4,7 @@ namespace App\Dtos\Patient;
 
 use Illuminate\Http\Request;
 use OpenApi\Annotations as OA;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -66,7 +67,7 @@ class SignUpReq
 
         $this->email = $req->input("email");
         $this->fullName = $req->input("fullName");
-        $this->password = $req->input("password");
+        $this->password = Hash::make($req->input("password"));
         $this->phone = $req->input("phone");
         $this->address = $req->input("address");
     }
