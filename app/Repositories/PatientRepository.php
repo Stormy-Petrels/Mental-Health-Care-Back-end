@@ -10,6 +10,7 @@ use App\Models\Doctor;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 
 
@@ -101,7 +102,7 @@ class PatientRepository
 
         DB::update($user_sql, [
             $user->getEmail(),
-            $user->getPassword(),
+            hash::make($user->getPassword()),
             $user->getFullName(),
             $user->getAddress(),
             $user->getPhone(),
