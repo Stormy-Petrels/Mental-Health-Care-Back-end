@@ -72,12 +72,10 @@ namespace App\Dtos\Common;
         $this->roleId = $roleId;
         $this->role = $role;
         $this->email = $email;
-        $this->password = $password;
         $this->fullName = $fullName;
+        $this->password = $password;
         $this->address = $address;
         $this->phone = $phone;
         $this->image = $image;
     }
 }
-
-
