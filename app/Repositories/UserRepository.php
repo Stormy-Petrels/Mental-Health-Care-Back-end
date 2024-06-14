@@ -69,9 +69,6 @@ class UserRepository
     public function updateStatusUsersActive($userId)
     {
         $user = DB::update("UPDATE users SET users.isActive = '1' WHERE users.id = $userId;");
-
-
-        // if ($user > 0) {
             $result = DB::select("SELECT * FROM users WHERE users.id = $userId");
             $transferResult = $result[0];
 
@@ -85,8 +82,6 @@ class UserRepository
                 $transferResult->address == null ? "" : $transferResult->address,
                 $transferResult->urlImage == null ? "" : $transferResult->urlImage
             );
-        // }
-        //   return null;
     }
 
 

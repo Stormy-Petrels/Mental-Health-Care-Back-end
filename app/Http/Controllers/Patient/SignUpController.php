@@ -62,7 +62,7 @@ class SignUpController extends Controller
                 "error" => "email is error"
             ], 401);
         }
-        $newUser = new User(Role::Patient, $req->email, $req->password, $req->fullName, $req->phone,$req->address,null,1);
+        $newUser = new User(Role::Patient, $req->email, $req->password, $req->fullName, $req->address,$req->phone,null,1);
         $newPatient = new Patient($newUser->getId());
 
         $this->userRepository->insert($newUser);

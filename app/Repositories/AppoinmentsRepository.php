@@ -43,47 +43,57 @@ class AppoinmentsRepository
     }
 
     public function selectAllAppointment()
-    {
+{
+    try {
         $appointments = DB::table('appoinments as a')
-        ->join('patients as p', 'a.patientId', '=', 'p.id')
-        ->join('users as u1', 'p.userId', '=', 'u1.id')
-        ->join('doctors as d', 'a.doctorId', '=', 'd.id')
-        ->join('users as u2', 'd.userId', '=', 'u2.id')
-        ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
-        ->select(
-            'a.id as appointmentId',
-            'a.dateBooking as date',
-            'u1.fullName as patientName',
-            'u2.fullName as doctorName',
-            'lt.timeStart as timeStart',
-            'lt.timeEnd as timeEnd'
-        )->get();
+            ->join('patients as p', 'a.patientId', '=', 'p.id')
+            ->join('users as u1', 'p.userId', '=', 'u1.id')
+            ->join('doctors as d', 'a.doctorId', '=', 'd.id')
+            ->join('users as u2', 'd.userId', '=', 'u2.id')
+            ->join('calendars as c', 'a.calendarId', '=', 'c.id')
+            ->join('listtimedoctors as lt', 'c.timeId', '=', 'lt.id')
+            ->select(
+                'a.id as appointmentId',
+                'a.dateBooking as date',
+                'u1.fullName as patientName',
+                'u2.fullName as doctorName',
+                'lt.timeStart as timeStart',
+                'lt.timeEnd as timeEnd'
+            )
+            ->get();
 
         $collection = collect($appointments);
-        $objectAppointments = $collection->map(function ($appoinment) {
+        $objectAppointments = $collection->map(function ($appointment) {
             return new AppointmentRes(
-                $appoinment->appointmentId,
-                $appoinment->patientName,
-                $appoinment->doctorName,
-                $appoinment->date,
-                $appoinment->timeStart,
-                $appoinment->timeEnd
+                $appointment->appointmentId,
+                $appointment->patientName,
+                $appointment->doctorName,
+                $appointment->date,
+                $appointment->timeStart,
+                $appointment->timeEnd
             );
         });
         return $objectAppointments;
+    } catch (\Exception $e) {
+        return collect();
     }
+}
 
-    public function totalAppointmentDoctor($appoinments){
-        $doctorCounts = collect($appoinments)
-        ->groupBy('doctorName')
-        ->map(function ($appointments, $doctorName) {
-            return [
-                'doctorName' => $doctorName,
-                'totalCount' => $appointments->count()
-            ];
-        })
-        ->values()
-        ->toArray();
+
+public function totalAppointmentDoctor($appointments)
+{
+    try {
+        $doctorCounts = collect($appointments)
+            ->groupBy('doctorName')
+            ->map(function ($appointments, $doctorName) {
+                return [
+                    'doctorName' => $doctorName,
+                    'totalCount' => $appointments->count()
+                ];
+            })
+            ->values()
+            ->toArray();
+
         $doctorCollect = collect($doctorCounts);
         $result = $doctorCollect->map(function ($item) {
             return new ChartRes(
@@ -92,8 +102,12 @@ class AppoinmentsRepository
             );
         });
 
-    return $result;
+        return $result;
+    } catch (\Exception $e) {
+        return collect();
     }
+}
+
 
     public function get_patient_id($email)
     {
@@ -128,45 +142,48 @@ class AppoinmentsRepository
     }
 
     public function getAppointmentHistory($id)
-    {
-        try {
-            $appointments = DB::table('appoinments as a')
-                ->join('patients as p', 'a.patientId', '=', 'p.id')
-                ->join('users as u1', 'p.userId', '=', 'u1.id')
-                ->join('doctors as d', 'a.doctorId', '=', 'd.id')
-                ->join('users as u2', 'd.userId', '=', 'u2.id')
-                ->join('listtimedoctors as lt', 'a.calendarId', '=', 'lt.id')
-                ->where('p.id', '=', $id)
-                ->select(
-                    'a.id as appointmentId',
-                    'a.dateBooking as date',
-                    'a.status',
-                    'u1.fullName as patientName',
-                    'u2.urlImage as image',
-                    'u2.fullName as doctorName',
-                    'lt.timeStart as timeStart',
-                    'lt.timeEnd as timeEnd',
-                    'lt.price as price'
-                )
-                ->get();
+{
+    try {
+        $appointments = DB::table('appoinments as a')
+            ->join('patients as p', 'a.patientId', '=', 'p.id')
+            ->join('users as u1', 'p.userId', '=', 'u1.id')
+            ->join('doctors as d', 'a.doctorId', '=', 'd.id')
+            ->join('users as u2', 'd.userId', '=', 'u2.id')
+            ->join('calendars as c', 'a.calendarId', '=', 'c.id')
+            ->join('listtimedoctors as lt', 'c.timeId', '=', 'lt.id')
+            ->where('p.id', '=', $id)
+            ->select(
+                'a.id as appointmentId',
+                'a.dateBooking as date',
+                'a.status',
+                'u1.fullName as patientName',
+                'u2.urlImage as image',
+                'u2.fullName as doctorName',
+                'lt.timeStart as timeStart',
+                'lt.timeEnd as timeEnd',
+                'lt.price as price'
+            )
+            ->get();
 
-            $objectAppointments = $appointments->map(function ($appointment) {
-                return new AppointmentHistoryRes(
-                    $appointment->appointmentId,
-                    $appointment->patientName,
-                    $appointment->doctorName,
-                    $appointment->image,
-                    $appointment->price,
-                    $appointment->date,
-                    $appointment->timeStart,
-                    $appointment->timeEnd,
-                    $appointment->status
-                );
-            });
+        $objectAppointments = $appointments->map(function ($appointment) {
+            return new AppointmentHistoryRes(
+                $appointment->appointmentId,
+                $appointment->patientName,
+                $appointment->doctorName,
+                $appointment->image,
+                $appointment->price,
+                $appointment->date,
+                $appointment->timeStart,
+                $appointment->timeEnd,
+                $appointment->status
+            );
+        });
 
-            return $objectAppointments;
-        } catch (\Exception $e) {
-            return collect();
-        }
+        return $objectAppointments;
+    } catch (\Exception $e) {
+        return collect();
     }
+}
+
+    
 }
