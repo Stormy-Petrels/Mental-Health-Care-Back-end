@@ -28,7 +28,6 @@ class PatientRepository
         ]);
     }
 
-
     public function findByEmail(string $email): Patient
     {
         $result = DB::select(
@@ -43,7 +42,6 @@ class PatientRepository
         $userData = $result[0];
         return new Patient($userData->id);
     }
-
 
     public function getInformationPatients()
     {
